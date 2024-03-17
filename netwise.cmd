@@ -37,7 +37,7 @@ set targetipdisplay=%darkred%%targetip%%brightwhite%
 set iptypedisplay=%brightgreen%%iptype%%brightwhite%
 set targetdir=C:\Users\%username%
 ::curl vars
-FOR /F %%a IN ('curl-s https://ipv4.icanhazip.com/') DO set localip=%%a
+FOR /F %%a IN ('curl -s https://ipv4.icanhazip.com/') DO set localip=%%a
 :startup
 cls
 if not %displaynotifs%==True goto commandline
