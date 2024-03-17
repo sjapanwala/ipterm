@@ -40,9 +40,10 @@ FOR /F %%a IN ('curl https://ipv4.icanhazip.com/') DO set localip=%%a
 :startup
 cls
 if not %displaynotifs%==True goto commandline
-::show msgs
+if exist warns\.install_file echo %white%🪧 Please Install Files For Full Access
 :commandline
-echo %brightwhite%┌──(%brightred%%termusername%%brightwhite%@%brightred%%computername%%brightwhite%)-[%iptype%][%targetip%]
+echo %brightwhite%
+echo ┌──(%brightred%%termusername%%brightwhite%@%brightred%%computername%%brightwhite%)-[%iptype%][%brightpurple%%targetip%%brightwhite%]
 set /p command=└─%brightred%!%brightwhite%
 :: general commands
 if "%command%"=="help" goto help
@@ -68,6 +69,14 @@ if "%command%"=="ipdisplay-t2" goto ipdisplaytarget2
 ::communicate
 
 :: send packets
+if "%command%"=="ping-t" goto pingtarget
+if "%command%"=="ping-h" goto pinghelp
+if "%command%"=="ping-tb" goto pingbare
+
+::test
+if "%command%"=="test-h" goto testhelp
+if "%command%"=="test-net" goto testnet
+
 
 ::geo
 
@@ -77,6 +86,8 @@ if "%command%"=="ipdisplay-t2" goto ipdisplaytarget2
 if "%command%"=="tracepath-h" goto connecthelp
 if "%command%"=="tracepath-t" goto connectpathtarget
 if "%command%"=="tracepath-web" goto connectpathweb
+
+::matrix
 
 goto invalidcommand
 
@@ -103,20 +114,6 @@ echo For Command Help, Type "(commandname)-h"
 echo.
 goto commandline
 
-:allhelp
-echo.
-echo INSERT
-echo insert-h :--: shows insert help screen
-echo insert-ip :-: able to insert target ip
-echo insert-api :: insert an API Key.
-echo.
-echo IPDISPLAY HELP
-echo ipdisplay-h :--: shows ip help screen
-echo ipdisplay-l :--: shows local ip information
-echo ipdisplay-t :--: shows targetip information (branch-one)
-echo ipdisplay-t2 :-: shows targetip information (branch-two)
-echo.
-goto commandline
 
 :switchuser
 echo.
@@ -205,7 +202,7 @@ curl http://ip-api.com/line/%newip%?fields=message
 curl http://ip-api.com/line/%newip%?fields=org
 echo ╚═════════════════════════════════════════════╝
 echo.
-if %newip%==%safetydomain% echo %brightyellow%WARNING!: TEMP-TARGET IP AND SAFETY DOMAIN MATCH %brightwhite%
+if %newip%==%safetydomain% echo %brightyellow%⚠️!: TEMP-TARGET IP AND SAFETY DOMAIN MATCH %brightwhite%
 set /p choice=Set %newip% as Target IP? (Y/N): 
 if %choice%==y goto settarget
 if %choice%==Y goto settarget
@@ -297,3 +294,102 @@ echo %brightcyan%
 tracert %web%
 echo.
 goto commandline
+
+:pinghelp
+echo.
+echo ╔Ping Help
+echo ╚:Sends/Pings to a network or IP given.
+echo.
+echo ping-h :----: shows this help menu
+echo ping-t :----: pings the target IP
+echo ping-tb :---: pings the target IP, feeds RAW data
+echo.
+goto commandline
+
+:pingtarget
+if %targetip%==none echo %brightred% No IP Set, Please Set A Target IP First%brightwhite% && goto commandline
+echo %white% Note: You Are Connecting To Another Server, Please Be Cautious.
+echo.
+:targetlen
+set /p targetlen=%brightwhite%Please Enter How Many Pings You Want To Send: 
+if %targetlen% gtr 100 goto lenchoice
+goto continuelen
+:lenchoice
+echo.
+set /p choice=%brightyellow%⚠️: You are sending greater than a 100 packets, Continue? (Y/N): 
+if %choice%==y goto continuelen
+if %choice%==Y goto continuelen
+if %choice%==N echo %brightyellow%Ping Set Abborted && goto commandline
+if %choice%==n echo %brightyellow%Ping Set Abborted && goto commandline
+goto lenchoice
+:continuelen
+set pingip= %targetip%
+timeout 2 >nul
+goto STARTPING
+:STARTPING
+set counter=0
+:pmain
+set /a counter+=1
+set connectionlevel=OK
+PING -n 1 %pingip% | FIND "TTL=">nul && echo [40;31m-$-[40;37mREPLY FROM [[40;32m%pingip%[40;37m] │ Connection [[40;33m%connectionlevel%[40;37m] │ Packet Loss: [40;32mNONE[40;37m │ Sending Signals: [40;32mTRUE[40;37m │ Recieving Signal: [40;32mTRUE[40;37m && set connectdata=CONNECTED, DATA SENT:%pingip%
+IF ERRORLEVEL 1 (SET in=0b & echo [40;31mConnection Dead.) && echo Connection Lost or Terminated. && goto commandline
+ping -t 2 0 10 127.0.0.1 >nul 
+if %targetlen%==%counter% goto commandline
+goto pmain
+
+:pingbare
+if %targetip%==none echo %brightred% No IP Set, Please Set A Target IP First%brightwhite% && goto commandline
+echo %white% Note: You Are Connecting To Another Server, Please Be Cautious.
+echo %white% Note: This is Ping Bare
+echo.
+:targetlen2
+set /p targetlen=%brightwhite%Please Enter How Many Pings You Want To Send: 
+if %targetlen% gtr 100 goto lenchoice2
+goto continuelen2
+:lenchoice2
+echo.
+set /p choice=%brightyellow%⚠️: You are sending greater than a 100 packets, Continue? (Y/N): 
+if %choice%==y goto continuelen2
+if %choice%==Y goto continuelen2
+if %choice%==N echo %brightyellow%Ping Set Abborted && goto commandline
+if %choice%==n echo %brightyellow%Ping Set Abborted && goto commandline
+goto lenchoice2
+:continuelen2
+set pingip= %targetip%
+timeout 2 >nul
+goto STARTPING2
+:STARTPING2
+set counter=0
+:pmain2
+set /a counter+=1
+echo %brightcyan%
+PING -n 1 %pingip%
+echo.
+IF ERRORLEVEL 1 (SET in=0b && echo %brightyellow%Connection Lost or Terminated. ) && goto commandline
+ping -t 2 0 10 127.0.0.1 >nul 
+if %targetlen%==%counter% goto commandline
+goto pmain2
+
+:testhelp
+echo.
+echo ╔Test Help
+echo ╚:Tests Various Functions
+echo.
+echo test-h :----: shows this help menu
+echo test-net :--: tests hosts network connection
+echo.
+goto commandline
+:testnet
+echo.
+set net=%localip%
+echo %brightwhite%Network in Question -  %brightgreen%%net%
+echo %brightyellow%Setting Up Ports
+timeout 1 >nul
+echo %brightyellow%Launching Test File
+timeout 1 >nul
+echo %brightyellow%Establishing Connection
+timeout 1 >nul
+echo.
+echo.
+PING -n 1 %net% | FIND "TTL=">nul && echo %brightwhite%Connection: %brightgreen%Great&& goto commandline
+IF ERRORLEVEL 1 (SET in=0b & echo %brightwhite%Connection: %brightred%No Network Connected/No Signals) &&  goto commandline
