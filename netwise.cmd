@@ -36,18 +36,27 @@ set displaynotifs=True
 set targetipdisplay=%darkred%%targetip%%brightwhite%
 set iptypedisplay=%brightgreen%%iptype%%brightwhite%
 set targetdir=C:\Users\%username%
+set countercool=False
+set banned=False
+set banstatus=UnBanned
+if exist .config\netwise\.banned set banned=True
+set banreason=SpamBot
+title NetWise📍
 ::curl vars
 FOR /F %%a IN ('curl -s https://ipv4.icanhazip.com/') DO set localip=%%a
 :startup
 cls
+if %banned%==True goto banned
 if not %displaynotifs%==True goto commandline
 if not %cd% == %targetdir% goto plantnoti
 goto commandline
 :plantnoti
+:bannedtest
 echo ┌─(%darkblue%Please Plant This File Into %brightgreen%%targetdir%%white% For Full Functionality)
 echo │
 echo ├─'%white%Use "%brightgreen%root-plant%white%" as root user to plant this file'
 echo └─'%white%Plant this file to not show this message again, or type "%brightgreen%disable-notif%white%" to temporarily disable this message'
+if %countercool%==True echo %brightyellow%⚠️: Please Refrain From Using IP Services %brightgreen%For 5 Minuites%brightyellow% In Order To Prevent Being Banned
 :commandline
 echo %brightwhite%
 echo ┌──(%brightred%%termusername%%brightwhite%@%brightred%%computername%%brightwhite%)-[%iptype%][%brightpurple%%targetip%%brightwhite%]
@@ -86,6 +95,10 @@ if "%command%"=="ping-tb" goto pingbare
 ::test
 if "%command%"=="test-h" goto testhelp
 if "%command%"=="test-net" goto testnet
+if "%command%"=="test-cl" set countercool=True && goto startup
+if "%command%"=="test-ban" goto banusr
+if "%command%"=="test-unban" del .config\netwise\.banned && goto startup
+
 
 
 :: disable
@@ -120,6 +133,30 @@ echo %white%Command '%command%' not found, Try help or Try "%command%-h"
 goto commandline
 
 
+:banned
+if %banned%==True set banstatus=Banned
+echo ❌: %brightred%%username% Has Been IP Banned (%localip%), Please Wait Until Ban Period Is Over [%banreason%]
+set /p bypass=└─(
+if "%bypass%"=="swusr/root" (
+    goto switchuser
+) else (
+    if "%bypass%"=="" (
+        REM Handle empty input
+        echo ~
+    )
+    goto banned
+)
+
+
+:banusr
+echo %username% Is Banned>.banned
+md .config
+md netwise
+move .banned netwise
+move netwise .config
+if exist .config\netwise\.banned set banned=True
+goto startup
+
 :help
 echo.
 echo ╔General Help
@@ -137,6 +174,20 @@ echo exit :--: exits a program
 echo. 
 echo For Command Help, Type "(commandname)-h"
 echo.
+goto commandline
+
+:allhelp
+echo.
+echo help
+echo help-a
+echo root-h
+echo insert-h
+echo ipdisplay-h
+echo ping-h
+echo test-h
+echo disable-h
+echo genip-h
+echo tracepath-h
 goto commandline
 
 :docu
@@ -165,6 +216,7 @@ if %choice%==2 goto rootuser
 echo.
 goto commandline
 :localuser
+if %banned%==True goto banned
 echo.
 set userpermission=user
 set termusername=%username%
@@ -176,12 +228,13 @@ echo username: root
 set /p pwd=password: 
 if "%pwd%"=="root" goto rootlogin
 echo %brightred%Incorrect Password Detected%brightwhite%
+if %banned%==True goto startup
 echo.
 goto commandline
 :rootlogin
 set userpermission=root
 set termusername=root
-echo %brightgreen%Successfully Logged Into Root%brightwhite%
+echo %brightgreen%Successfully Logged Into Root%brightwhite% && set banned=False
 echo.
 goto commandline
 
@@ -225,6 +278,7 @@ echo %brightwhite%IP Type :-----------: %darkred%%iptype%
 echo %brightwhite%Available IP Type :-: %darkred%IPV4,IPV6
 echo %brightwhite%Local Domain :------: %darkred%%userdomain%
 echo %brightwhite%Safety Domain :-----: %darkred%%safetydomain%
+echo %brightwhite%Ban Status :--------: %darkred%%banstatus%
 echo.
 echo %brightwhite%Terminal Information
 echo.
@@ -465,6 +519,7 @@ echo genip-create :: creates a singular random IP, shows whether said IP exists
 echo genip-loop :--: creates multiples IP until a real IP is found (depends on API key, and Max Requests)
 goto commandline
 :genip
+if %countercool%==True echo ❌: %brightred%This Command Has Been Temporarily Blocked.
 echo.
 set /a num=%random% %%4
 set /a num1=%random% %%4
@@ -487,9 +542,12 @@ echo Randomly Generated IP: %generatedip%
 curl http://ip-api.com/line/%generatedip%?fields=status
 goto commandline
 :geniploop
+if %countercool%==True echo ❌: %brightred%This Command Has Been Temporarily Blocked.
 echo %white%Note: This Will Run Until A Valid IP is found
 echo.
+set counter=0
 :startloop
+if %counter%==20 set countercool=True && goto startup
 set /a num=%random% %%4
 set /a num1=%random% %%4
 set /a num2=%random% %%4
@@ -507,6 +565,7 @@ for /f "tokens=*" %%i in ('curl -s "http://ip-api.com/line/%generatedip%?fields=
 echo %brightred%%status%
 echo %generatedip%
 PING -n 1 8.8.8.8 | FIND "TTL=">nul
+set /a counter+=1
 if %status%==fail goto startloop
 echo.
 echo %brightwhite%Status: %brightgreen%[%status%]
