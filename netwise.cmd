@@ -16,6 +16,10 @@ set darkpurple=[40;35m
 set darkcyan=[40;36m
 set white=[40;37m
 ::---function vars
+::update functions
+set currentfilename=%~n0%~x0
+::if %currentfilename%==netwise.bat if exist netwise.cmd start netwise.cmd && del netwise.bat
+::if %currentfilename%==netwise.cmd if exist netwise.bat start netwise.bat && del netwise.cmd
 ::terminal settings
 set tversion=0.1
 set ttheme=Original
@@ -51,26 +55,32 @@ if not %displaynotifs%==True goto commandline
 if not %cd% == %targetdir% goto plantnoti
 goto commandline
 :plantnoti
-:bannedtest
-echo ┌─(%darkblue%Please Plant This File Into %brightgreen%%targetdir%%white% For Full Functionality)
+echo ┌─(%brightblue%Please Plant This File Into %brightgreen%%targetdir%%brightblue% For Full Functionality)%white%
 echo │
 echo ├─'%white%Use "%brightgreen%root-plant%white%" as root user to plant this file'
 echo └─'%white%Plant this file to not show this message again, or type "%brightgreen%disable-notif%white%" to temporarily disable this message'
 if %countercool%==True echo %brightyellow%⚠️: Please Refrain From Using IP Services %brightgreen%For 5 Minuites%brightyellow% In Order To Prevent Being Banned
 :commandline
 echo %brightwhite%
-echo ┌──(%brightred%%termusername%%brightwhite%@%brightred%%computername%%brightwhite%)-[%iptype%][%brightpurple%%targetip%%brightwhite%]
+echo ┌───(%brightred%%termusername%%brightwhite%@%brightred%%computername%%brightwhite%)-[%brightpurple%%targetip%%brightwhite%]
 set /p command=└─%brightred%!%brightwhite%
 :: general commands
 if "%command%"=="docu" goto docu
 if "%command%"=="exit" exit
-if "%command%"=="readme" start https://shorturl.at/uAIMO && goto commandline
+if "%command%"=="comstruc" goto comstruc
+if "%command%"=="readme" start https://github.com/sjapanwala/netwise && goto commandline
+if "%command%"=="credit" start https://github.com/sjapanwala && goto commandline
 if "%command%"=="help" goto help
 if "%command%"=="help-a" goto allhelp
 if "%command%"=="cls" goto startup
 if "%command%"=="clear" goto startup
 if "%command%"=="swusr" goto switchuser
 if "%command%"=="info" goto info
+if "%command%"=="relaunch" start %currentfilename% && exit
+if "%command%"=="comstruc" goto comstruc
+
+
+
 ::root
 if "%command%"=="root-h" goto roothelp
 if "%command%"=="root-plant" goto plant
@@ -85,8 +95,6 @@ if "%command%"=="ipdisplay-l" goto ipdisplaylocal
 if "%command%"=="ipdisplay-t" goto ipdisplaytarget
 if "%command%"=="ipdisplay-t2" goto ipdisplaytarget2
 
-::communicate
-
 :: send packets
 if "%command%"=="ping-t" goto pingtarget
 if "%command%"=="ping-h" goto pinghelp
@@ -99,18 +107,15 @@ if "%command%"=="test-cl" set countercool=True && goto startup
 if "%command%"=="test-ban" goto banusr
 if "%command%"=="test-unban" del .config\netwise\.banned && goto startup
 
-
-
 :: disable
-if "%command%"=="disable-h" goto disablehelp
-if "%command%"=="disable-notif" goto disablenotif
+if "%command%"=="dis-h" goto disablehelp
+if "%command%"=="dis-notif" goto disablenotif
 
 
 ::generateip
 if "%command%"=="genip-h" goto geniphelp
 if "%command%"=="genip-create" goto genip
 if "%command%"=="genip-loop" goto geniploop
-
 
 ::geo
 
@@ -121,9 +126,11 @@ if "%command%"=="tracepath-h" goto connecthelp
 if "%command%"=="tracepath-t" goto connectpathtarget
 if "%command%"=="tracepath-web" goto connectpathweb
 
-::matrix
+::update
+if "%command%"=="update-h" goto updatehelp
+if "%command%"=="update-a" goto updateall
 
-::
+
 
 goto invalidcommand
 
@@ -175,19 +182,43 @@ echo.
 echo For Command Help, Type "(commandname)-h"
 echo.
 goto commandline
-
 :allhelp
 echo.
-echo help
-echo help-a
-echo root-h
-echo insert-h
-echo ipdisplay-h
-echo ping-h
-echo test-h
-echo disable-h
-echo genip-h
-echo tracepath-h
+echo %brightwhite%┌───────────────────┐┌───────────────────┐┌───────────────────┐┌───────────────────┐┌───────────────────┐
+echo │ All Help/Commands ││ Developed: 3/2024 ││ Dev: sjapanwala   ││ Commands: 34      ││ NetWise Terminal  │
+echo └───────────────────┘└───────────────────┘└───────────────────┘└───────────────────┘└───────────────────┘
+echo ┌───────────────────────────────────────────────────┐┌──────────────────────────────────────────────────┐
+echo │ %brightgreen%https://github.com/sjapanwala/netwise%brightwhite%             ││ %brightgreen%https://github.com/sjapanwala%brightwhite%                    │
+echo └───────────────────────────────────────────────────┘└──────────────────────────────────────────────────┘ 
+echo.
+echo [%brightred%*%brightwhite%] General Help   [%brightred%*%brightwhite%] Root Help   [%brightred%*%brightwhite%] Insert Help   [%brightred%*%brightwhite%] IP Display Help    [%brightred%*%brightwhite%] Ping Help
+echo ├─(help)           ├─(root-h)      ├─(insert-h)      ├─(ipdisplay-h)        ├─(ping-h)
+echo ├─(help-a)         ├─(root-plant)  ├─(insert-ip)     ├─(ipdisplay-t)        ├─(ping-t)
+echo ├─(docu)                           ├─(insert-api)    ├─(ipdisplay-t2)       ├─(ping-tb)
+echo ├─(readme)                                           ├─(ipdisplay-l)
+echo ├─(cls/clear)
+echo ├─(swusr)
+echo ├─(info)
+echo ├─(relaunch)
+echo ├─(comstruc)
+echo ├─(credit)
+echo.
+echo [%brightred%*%brightwhite%] Testing Help   [%brightred%*%brightwhite%] Dis Help    [%brightred%*%brightwhite%] Generate IP   [%brightred%*%brightwhite%] TracePath Help     [%brightred%*%brightwhite%] Update Help
+echo ├─(test-h)         ├─(dis-h)       ├─(genip-h)       ├─(tracepath-h)        ├─(update-h)
+echo ├─(test-net)       ├─(dis-notif)   ├─(genip-create)  ├─(tracepath-t)        ├─(update-a)
+echo ├─(test-cl)                        ├─(genip-loop)    ├─(tracepath-web)
+echo ├─(test-ban)
+echo ├─(test-unban)
+echo.
+echo For More Details About a Command, Enter "%brightgreen%(commandname)-h%brightwhite%"
+goto commandline
+
+:comstruc
+echo.
+echo %white%Structure of A Command,
+echo %white%[%brightred%!%white%] - Every Command Must Follow LowerCase Unless Specified.
+echo %white%[%brightred%!%white%] - Every Command Must Have An Arguement After The Main Command Unless Specified.
+echo %white%[%brightred%!%white%] - Some Commands May Alter State, Please Remember Previous States or Save States
 goto commandline
 
 :docu
@@ -207,8 +238,8 @@ goto commandline
 echo.
 echo User Profiles Available.
 echo.
-echo 1) %username%
-echo 2) root
+echo [1] %username%
+echo [2] root
 echo.
 set /p choice=: 
 if %choice%==1 goto localuser
@@ -251,15 +282,16 @@ goto commandline
 
 :plant
 if not %userpermission%==root echo %brightred%User Permission Is Not Allowed%brightwhite% && goto commandline
-move netwise.cmd C:\Users\%username%
+if exist netwise.cmd move netwise.cmd C:\Users\%username%
+if exist netwise.bat move netwise.bat C:\Users\%username%
 
 :disablehelp
 echo.
 echo ╔Disable Help
 echo ╚:Disable Items, Root Access Is REQUIRED for some operations
 echo.
-echo disable-h :----: shows this help menu
-echo disable-notif :----: disables notifications temporarily
+echo dis-h :----: shows this help menu
+echo dis-notif :----: disables notifications temporarily
 echo.
 goto commandline
 
@@ -583,3 +615,66 @@ set targetip=%generatedip%
 echo %brightgreen%%generatedip% Has Been Set As New Target%white%
 goto commandline
 
+:updatehelp
+echo.
+echo ╔Generate Random IP
+echo ╚:Combines random numbers to generate a possible IP
+echo.
+echo update-h :----: shows this help menu
+echo update-a :----: allows user to update entire terminal
+:updateall
+echo.
+echo %brightwhite%Welcome to %brightred%NetWise%brightwhite% Update Manager
+echo.
+echo [1] - Install Updates From Local Files
+echo [2] - Install Updates From Network (curl)
+echo.
+set /p uptchoice=
+if %uptchoice%==1 goto localfiles
+if %uptchoice%==2 goto netfiles
+goto commandline
+
+:localfiles
+echo.
+echo %white%Note: All Paths Need To Be Green
+echo %white%Note: File paths Need to Be Identical, Or Else Updates May Not Apply.
+echo.
+if %cd%==C:\Users\%username% echo %brightwhite%Current  File Path - %brightgreen%%cd%
+if not %cd%==C:\Users\%username% echo %brightwhite%Current  File Path - %brightred%%cd%
+echo %brightwhite%Desired  File Path - %brightgreen%C:\Users\%username%
+echo %brightwhite%Download File Path - %brightgreen%C:\Users\%username%\.config\netwise
+echo.
+if exist C:\Users\%username%\.config\netwise\.updatefile echo %brightgreen%Updates Available
+if not exist C:\Users\%username%\.config\netwise\.updatefile echo %brightyellow%No Updates Available
+if exist C:\Users\%username%\.config\netwise\.updatefile goto applyupdt
+goto commandline
+:netfiles
+set /p curllink=Please Enter Update Link Here: 
+start %curllink% && goto applyupdate
+:applyupdt
+set /p applyupdate=%white%Apply Updates? (Y/N)?: 
+if %applyupdate%==y goto applyupdate
+if %applyupdate%==Y goto applyupdate
+if %applyupdate%==N echo %brightyellow%Update Apply Abborted && goto commandline
+if %applyupdate%==n echo %brightyellow%Update Apply Abborted && goto commandline
+:applyupdate
+echo. 
+move C:\Users\%username%\.config\netwise\.updatefile C:\Users\%username%
+::rename ".updatefile" ".netwise"
+PING -n 1 8.8.8.8 | FIND "TTL=">nul && echo %white%[%brightred%━━━━%white%━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━]
+PING -n 1 8.8.8.8 | FIND "TTL=">nul && echo %white%[%brightred%━━━━━━━━%white%━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━]
+PING -n 1 8.8.8.8 | FIND "TTL=">nul && echo %white%[%brightred%━━━━━━━━━━━━%white%━━━━━━━━━━━━━━━━━━━━━━━━━━━━]
+PING -n 1 8.8.8.8 | FIND "TTL=">nul && echo %white%[%brightred%━━━━━━━━━━━━━━━━%white%━━━━━━━━━━━━━━━━━━━━━━━━]
+PING -n 1 8.8.8.8 | FIND "TTL=">nul && echo %white%[%brightred%━━━━━━━━━━━━━━━━━━━━%white%━━━━━━━━━━━━━━━━━━━━]
+PING -n 1 8.8.8.8 | FIND "TTL=">nul && echo %white%[%brightyellow%━━━━━━━━━━━━━━━━━━━━━━━━%white%━━━━━━━━━━━━━━━━]
+PING -n 1 8.8.8.8 | FIND "TTL=">nul && echo %white%[%brightyellow%━━━━━━━━━━━━━━━━━━━━━━━━━━━━%white%━━━━━━━━━━━━]
+PING -n 1 8.8.8.8 | FIND "TTL=">nul && echo %white%[%brightyellow%━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━%white%━━━━━━━━]
+PING -n 1 8.8.8.8 | FIND "TTL=">nul && echo %white%[%brightyellow%━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━%white%━━━━]
+PING -n 1 8.8.8.8 | FIND "TTL=">nul && echo %white%[%brightgreen%━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━%white%]
+echo.
+echo %brightgreen%Great! Updates Successfully Applied.
+echo %white%Note: Terminal Refreshing in 5 Seconds, Wait or Press Any Key.
+timeout 5 >nul
+::rename ".netwise" "netwise.bat"
+start netwise.cmd && exit
+goto commandline
