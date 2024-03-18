@@ -118,6 +118,11 @@ if "%command%"=="genip-create" goto genip
 if "%command%"=="genip-loop" goto geniploop
 
 ::geo
+if "%command%"=="geoip-h" goto geoiphelp
+if "%command%"=="geoip-t" goto geoiptarg
+if "%command%"=="geoip-s" goto contshow
+
+
 
 ::whois
 
@@ -203,6 +208,11 @@ echo ├─ test-net        ├─ dis-notif    ├─ genip-create   ├─ tra
 echo ├─ test-cl                         ├─ genip-loop     ├─ tracepath-web       ├─ update-r
 echo ├─ test-ban 
 echo ├─ test-unban 
+echo.
+echo [%brightred%*%brightwhite%] Geographic IP
+echo ├─ geoip-h
+echo ├─ geoip-t
+echo ├─ geoip-s
 echo.
 echo For More Details About a Command, Enter "%brightgreen%(commandname)-h%brightwhite%"
 goto commandline
@@ -549,7 +559,7 @@ echo genip-create :: creates a singular random IP, shows whether said IP exists
 echo genip-loop :--: creates multiples IP until a real IP is found (depends on API key, and Max Requests)
 goto commandline
 :genip
-if %countercool%==True echo ❌: %brightred%This Command Has Been Temporarily Blocked.
+if %countercool%==True echo ❌: %brightred%This Command Has Been Temporarily Blocked. && goto startup
 echo.
 set /a num=%random% %%4
 set /a num1=%random% %%4
@@ -572,7 +582,7 @@ echo Randomly Generated IP: %generatedip%
 curl http://ip-api.com/line/%generatedip%?fields=status
 goto commandline
 :geniploop
-if %countercool%==True echo ❌: %brightred%This Command Has Been Temporarily Blocked.
+if %countercool%==True echo ❌: %brightred%This Command Has Been Temporarily Blocked. && goto startup
 echo %white%Note: This Will Run Until A Valid IP is found
 echo.
 set counter=0
@@ -718,4 +728,386 @@ if "%errorfolder%" NEQ "True" (
 )
 echo %brightgreen%Finished Applying Files.
 if %direrror%==True echo %brightred%Please Plant into User File.
+goto commandline
+
+:geoiphelp
+echo.
+echo ╔Geographical IP
+echo ╠:Displays a geographical map where the target IP is Located
+echo ╚Note, This Feature is Rate Limited, Depending on Usage of Host IP address, Only Few Requests Are Allowed.
+echo.
+echo geoip-h :----: access this help menu
+echo geoip-t :----: shows the geolocation of the target IP address
+echo geoip-s :----: shows a selected part of a map
+echo.
+goto commandline
+
+:geoiptarg
+if %targetip%==none echo %brightred% No IP Set, Please Set A Target IP First%brightwhite% && goto commandline
+FOR /F %%h IN ('curl -s https://ipapi.co/%targetip%/country/') DO set geolocation=%%h
+:: Toggle variables initialization
+set "natoggle=%white%"
+set "satoggle=%white%"
+set "eutoggle=%white%"
+set "aftoggle=%white%"
+set "astoggle=%white%"
+set "octoggle=%white%"
+::find countrycode
+if %geolocation%==AF set "countrycode=AF"
+if %geolocation%==AL set "countrycode=EU"
+if %geolocation%==DZ set "countrycode=AF"
+if %geolocation%==AS set "countrycode=OC"
+if %geolocation%==AD set "countrycode=EU"
+if %geolocation%==AO set "countrycode=AF"
+if %geolocation%==AI set "countrycode=NA"
+if %geolocation%==AQ set "countrycode=AN"
+if %geolocation%==AG set "countrycode=NA"
+if %geolocation%==AR set "countrycode=SA"
+if %geolocation%==AM set "countrycode=AS"
+if %geolocation%==AW set "countrycode=NA"
+if %geolocation%==AU set "countrycode=OC"
+if %geolocation%==AT set "countrycode=EU"
+if %geolocation%==AZ set "countrycode=AS"
+if %geolocation%==BS set "countrycode=NA"
+if %geolocation%==BH set "countrycode=AS"
+if %geolocation%==BD set "countrycode=AS"
+if %geolocation%==BB set "countrycode=NA"
+if %geolocation%==BY set "countrycode=EU"
+if %geolocation%==BE set "countrycode=EU"
+if %geolocation%==BZ set "countrycode=NA"
+if %geolocation%==BJ set "countrycode=AF"
+if %geolocation%==BM set "countrycode=NA"
+if %geolocation%==BT set "countrycode=AS"
+if %geolocation%==BO set "countrycode=SA"
+if %geolocation%==BA set "countrycode=EU"
+if %geolocation%==BW set "countrycode=AF"
+if %geolocation%==BV set "countrycode=AN"
+if %geolocation%==BR set "countrycode=SA"
+if %geolocation%==IO set "countrycode=AS"
+if %geolocation%==BN set "countrycode=AS"
+if %geolocation%==BG set "countrycode=EU"
+if %geolocation%==BF set "countrycode=AF"
+if %geolocation%==BI set "countrycode=AF"
+if %geolocation%==KH set "countrycode=AS"
+if %geolocation%==CM set "countrycode=AF"
+if %geolocation%==CA set "countrycode=NA"
+if %geolocation%==CV set "countrycode=AF"
+if %geolocation%==KY set "countrycode=NA"
+if %geolocation%==CF set "countrycode=AF"
+if %geolocation%==TD set "countrycode=AF"
+if %geolocation%==CL set "countrycode=SA"
+if %geolocation%==CN set "countrycode=AS"
+if %geolocation%==CX set "countrycode=AS"
+if %geolocation%==CC set "countrycode=AS"
+if %geolocation%==CO set "countrycode=SA"
+if %geolocation%==KM set "countrycode=AF"
+if %geolocation%==CG set "countrycode=AF"
+if %geolocation%==CD set "countrycode=AF"
+if %geolocation%==CK set "countrycode=OC"
+if %geolocation%==CR set "countrycode=NA"
+if %geolocation%==CI set "countrycode=AF"
+if %geolocation%==HR set "countrycode=EU"
+if %geolocation%==CU set "countrycode=NA"
+if %geolocation%==CY set "countrycode=AS"
+if %geolocation%==CZ set "countrycode=EU"
+if %geolocation%==DK set "countrycode=EU"
+if %geolocation%==DJ set "countrycode=AF"
+if %geolocation%==DM set "countrycode=NA"
+if %geolocation%==DO set "countrycode=NA"
+if %geolocation%==EC set "countrycode=SA"
+if %geolocation%==EG set "countrycode=AF"
+if %geolocation%==SV set "countrycode=NA"
+if %geolocation%==GQ set "countrycode=AF"
+if %geolocation%==ER set "countrycode=AF"
+if %geolocation%==EE set "countrycode=EU"
+if %geolocation%==ET set "countrycode=AF"
+if %geolocation%==FK set "countrycode=SA"
+if %geolocation%==FO set "countrycode=EU"
+if %geolocation%==FJ set "countrycode=OC"
+if %geolocation%==FI set "countrycode=EU"
+if %geolocation%==FR set "countrycode=EU"
+if %geolocation%==GF set "countrycode=SA"
+if %geolocation%==PF set "countrycode=OC"
+if %geolocation%==TF set "countrycode=AN"
+if %geolocation%==GA set "countrycode=AF"
+if %geolocation%==GM set "countrycode=AF"
+if %geolocation%==GE set "countrycode=AS"
+if %geolocation%==DE set "countrycode=EU"
+if %geolocation%==GH set "countrycode=AF"
+if %geolocation%==GI set "countrycode=EU"
+if %geolocation%==GR set "countrycode=EU"
+if %geolocation%==GL set "countrycode=NA"
+if %geolocation%==GD set "countrycode=NA"
+if %geolocation%==GP set "countrycode=NA"
+if %geolocation%==GU set "countrycode=OC"
+if %geolocation%==GT set "countrycode=NA"
+if %geolocation%==GG set "countrycode=EU"
+if %geolocation%==GN set "countrycode=AF"
+if %geolocation%==GW set "countrycode=AF"
+if %geolocation%==GY set "countrycode=SA"
+if %geolocation%==HT set "countrycode=NA"
+if %geolocation%==HM set "countrycode=AN"
+if %geolocation%==VA set "countrycode=EU"
+if %geolocation%==HN set "countrycode=NA"
+if %geolocation%==HK set "countrycode=AS"
+if %geolocation%==HU set "countrycode=EU"
+if %geolocation%==IN set "countrycode=AS"
+if %geolocation%==ID set "countrycode=AS"
+if %geolocation%==IR set "countrycode=AS"
+if %geolocation%==IQ set "countrycode=AS"
+if %geolocation%==IE set "countrycode=EU"
+if %geolocation%==IM set "countrycode=EU"
+if %geolocation%==IL set "countrycode=AS"
+if %geolocation%==IT set "countrycode=EU"
+if %geolocation%==JM set "countrycode=NA"
+if %geolocation%==JP set "countrycode=AS"
+if %geolocation%==JE set "countrycode=EU"
+if %geolocation%==JO set "countrycode=AS"
+if %geolocation%==KZ set "countrycode=AS"
+if %geolocation%==KE set "countrycode=AF"
+if %geolocation%==KI set "countrycode=OC"
+if %geolocation%==KP set "countrycode=AS"
+if %geolocation%==KR set "countrycode=AS"
+if %geolocation%==KW set "countrycode=AS"
+if %geolocation%==KG set "countrycode=AS"
+if %geolocation%==LA set "countrycode=AS"
+if %geolocation%==LV set "countrycode=EU"
+if %geolocation%==LB set "countrycode=AS"
+if %geolocation%==LS set "countrycode=AF"
+if %geolocation%==LR set "countrycode=AF"
+if %geolocation%==LY set "countrycode=AF"
+if %geolocation%==LI set "countrycode=EU"
+if %geolocation%==LT set "countrycode=EU"
+if %geolocation%==LU set "countrycode=EU"
+if %geolocation%==MO set "countrycode=AS"
+if %geolocation%==MK set "countrycode=EU"
+if %geolocation%==MG set "countrycode=AF"
+if %geolocation%==MW set "countrycode=AF"
+if %geolocation%==MY set "countrycode=AS"
+if %geolocation%==MV set "countrycode=AS"
+if %geolocation%==ML set "countrycode=AF"
+if %geolocation%==MT set "countrycode=EU"
+if %geolocation%==MH set "countrycode=OC"
+if %geolocation%==MQ set "countrycode=NA"
+if %geolocation%==MR set "countrycode=AF"
+if %geolocation%==MU set "countrycode=AF"
+if %geolocation%==YT set "countrycode=AF"
+if %geolocation%==MX set "countrycode=NA"
+if %geolocation%==FM set "countrycode=OC"
+if %geolocation%==MD set "countrycode=EU"
+if %geolocation%==MC set "countrycode=EU"
+if %geolocation%==MN set "countrycode=AS"
+if %geolocation%==ME set "countrycode=EU"
+if %geolocation%==MS set "countrycode=NA"
+if %geolocation%==MA set "countrycode=AF"
+if %geolocation%==MZ set "countrycode=AF"
+if %geolocation%==MM set "countrycode=AS"
+if %geolocation%==NA set "countrycode=AF"
+if %geolocation%==NR set "countrycode=OC"
+if %geolocation%==NP set "countrycode=AS"
+if %geolocation%==NL set "countrycode=EU"
+if %geolocation%==AN set "countrycode=NA"
+if %geolocation%==NC set "countrycode=OC"
+if %geolocation%==NZ set "countrycode=OC"
+if %geolocation%==NI set "countrycode=NA"
+if %geolocation%==NE set "countrycode=AF"
+if %geolocation%==NG set "countrycode=AF"
+if %geolocation%==NU set "countrycode=OC"
+if %geolocation%==NF set "countrycode=OC"
+if %geolocation%==MP set "countrycode=OC"
+if %geolocation%==NO set "countrycode=EU"
+if %geolocation%==OM set "countrycode=AS"
+if %geolocation%==PK set "countrycode=AS"
+if %geolocation%==PW set "countrycode=OC"
+if %geolocation%==PS set "countrycode=AS"
+if %geolocation%==PA set "countrycode=NA"
+if %geolocation%==PG set "countrycode=OC"
+if %geolocation%==PY set "countrycode=SA"
+if %geolocation%==PE set "countrycode=SA"
+if %geolocation%==PH set "countrycode=AS"
+if %geolocation%==PN set "countrycode=OC"
+if %geolocation%==PL set "countrycode=EU"
+if %geolocation%==PT set "countrycode=EU"
+if %geolocation%==PR set "countrycode=NA"
+if %geolocation%==QA set "countrycode=AS"
+if %geolocation%==RE set "countrycode=AF"
+if %geolocation%==RO set "countrycode=EU"
+if %geolocation%==RU set "countrycode=EU"
+if %geolocation%==RW set "countrycode=AF"
+if %geolocation%==SH set "countrycode=AF"
+if %geolocation%==KN set "countrycode=NA"
+if %geolocation%==LC set "countrycode=NA"
+if %geolocation%==PM set "countrycode=NA"
+if %geolocation%==VC set "countrycode=NA"
+if %geolocation%==WS set "countrycode=OC"
+if %geolocation%==SM set "countrycode=EU"
+if %geolocation%==ST set "countrycode=AF"
+if %geolocation%==SA set "countrycode=AS"
+if %geolocation%==SN set "countrycode=AF"
+if %geolocation%==RS set "countrycode=EU"
+if %geolocation%==SC set "countrycode=AF"
+if %geolocation%==SL set "countrycode=AF"
+if %geolocation%==SG set "countrycode=AS"
+if %geolocation%==SK set "countrycode=EU"
+if %geolocation%==SI set "countrycode=EU"
+if %geolocation%==SB set "countrycode=OC"
+if %geolocation%==SO set "countrycode=AF"
+if %geolocation%==ZA set "countrycode=AF"
+if %geolocation%==GS set "countrycode=AN"
+if %geolocation%==ES set "countrycode=EU"
+if %geolocation%==LK set "countrycode=AS"
+if %geolocation%==SD set "countrycode=AF"
+if %geolocation%==SR set "countrycode=SA"
+if %geolocation%==SJ set "countrycode=EU"
+if %geolocation%==SZ set "countrycode=AF"
+if %geolocation%==SE set "countrycode=EU"
+if %geolocation%==CH set "countrycode=EU"
+if %geolocation%==SY set "countrycode=AS"
+if %geolocation%==TW set "countrycode=AS"
+if %geolocation%==TJ set "countrycode=AS"
+if %geolocation%==TZ set "countrycode=AF"
+if %geolocation%==TH set "countrycode=AS"
+if %geolocation%==TL set "countrycode=AS"
+if %geolocation%==TG set "countrycode=AF"
+if %geolocation%==TK set "countrycode=OC"
+if %geolocation%==TO set "countrycode=OC"
+if %geolocation%==TT set "countrycode=NA"
+if %geolocation%==TN set "countrycode=AF"
+if %geolocation%==TR set "countrycode=EU"
+if %geolocation%==TM set "countrycode=AS"
+if %geolocation%==TC set "countrycode=NA"
+if %geolocation%==TV set "countrycode=OC"
+if %geolocation%==UG set "countrycode=AF"
+if %geolocation%==UA set "countrycode=EU"
+if %geolocation%==AE set "countrycode=AS"
+if %geolocation%==GB set "countrycode=EU"
+if %geolocation%==US set "countrycode=NA"
+if %geolocation%==UM set "countrycode=OC"
+if %geolocation%==UY set "countrycode=SA"
+if %geolocation%==UZ set "countrycode=AS"
+if %geolocation%==VU set "countrycode=OC"
+if %geolocation%==VE set "countrycode=SA"
+if %geolocation%==VN set "countrycode=AS"
+if %geolocation%==VG set "countrycode=NA"
+if %geolocation%==VI set "countrycode=NA"
+if %geolocation%==WF set "countrycode=OC"
+if %geolocation%==EH set "countrycode=AF"
+if %geolocation%==YE set "countrycode=AS"
+if %geolocation%==ZM set "countrycode=AF"
+if %geolocation%==ZW set "countrycode=AF"
+set "countrycode=ER"
+
+:: Change color
+if "%countrycode%"=="NA" set "natoggle=%brightred%"
+if "%countrycode%"=="SA" set "satoggle=%brightred%"
+if "%countrycode%"=="EU" set "eutoggle=%brightred%"
+if "%countrycode%"=="AF" set "aftoggle=%brightred%"
+if "%countrycode%"=="AS" set "astoggle=%brightred%"
+if "%countrycode%"=="OC" set "octoggle=%brightred%"
+if "%countrycode%"=="ER" goto error
+
+:defaultmap
+echo.
+echo %brightwhite%[%brightred%*%brightwhite%] Country:   %geolocation%
+echo %brightwhite%[%brightred%*%brightwhite%] Continent: %countrycode%
+echo %brightwhite%[%brightred%*%brightwhite%] IP:        %targetip%
+echo %natoggle%  ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣄⣠⣀⡀⣀⣠⣤⣤⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+echo %natoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣄⢠⣠⣼⣿⣿⣿⣟⣿⣿⣿⣿⣿⣿⣿⣿⡿⠋⠀⠀%eutoggle%⠀⢠⣤⣦⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀%astoggle%⠰⢦⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+echo %natoggle%⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⣟⣾⣿⣽⣿⣿⣅⠈⠉⠻⣿⣿⣿⣿⣿⡿⠇⠀⠀⠀%eutoggle%⠀⠀⠉⠀⠀⠀⠀⠀⢀⡶⠒⢉⡀%astoggle%⢠⣤⣶⣶⣿⣷⣆⣀⡀⠀⢲⣖⠒⠀⠀⠀⠀⠀⠀⠀
+echo %natoggle%⢀⣤⣾⣶⣦⣤⣤⣶⣿⣿⣿⣿⣿⣿⣽⡿⠻⣷⣀⠀⢻⣿⣿⣿⡿⠟⠀⠀⠀%eutoggle%⠀⠀⠀⣤⣶⣶⣤⣀⣀⣬⣷⣦%astoggle%⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣦⣤⣦⣼⣀⠀
+echo %natoggle%⠈⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠛⠓⣿⣿⠟⠁⠘⣿⡟⠁⠀⠘⠛⠁%eutoggle%⠀⠀⢠⣾⣿⢿⣿⣿⣿⣿⣿%astoggle%⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠏⠙⠁
+echo %natoggle%⠀⠸⠟⠋⠀⠈⠙⣿⣿⣿⣿⣿⣿⣷⣦⡄⣿⣿⣿⣆⠀⠀⠀⠀⠀%eutoggle%⠀⠀⠀⣼⣆⢘⣿⣯⣼⣿⣿⣿⣿⣿%astoggle%⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡉⠉⢱⡿⠀⠀⠀⠀⠀
+echo %natoggle%⠀⠀⠀⠀⠀⠀⠀⠘⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣟⡿⠦⠀⠀⠀⠀⠀%eutoggle%⠀⠀⠙⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿%astoggle%⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⡗⠀⠈⠀⠀⠀⠀⠀⠀
+echo %natoggle%⠀⠀⠀⠀⠀⠀⠀⠀⢻⣿⣿⣿⣿⣿⣿⣿⣿⠋⠁⠀⠀⠀⠀⠀⠀⠀%eutoggle%⠀⠀⢿⣿⣉⣿⡿⢿⢷⣾⣾⣿⣞%astoggle%⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠋⣠⠟⠀⠀⠀⠀⠀⠀⠀⠀
+echo %natoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⣿⣿⣿⠿⠿⣿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀%aftoggle%⠀⣀⣾⣿⣿⣷⣦⣶⣦⣼⣿⣿%astoggle%⣿⣿⣿⣿ ⣿⣿⣿⣿⣿⣿⣿⣿⣷⠈⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀
+echo %natoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠻⣿⣤⡖⠛⠶⠤⡀⠀⠀⠀⠀⠀⠀⠀%aftoggle%⢰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿%astoggle%⣿⡿⠁⠙⣿⣿⠿⢻⣿⣿⡿⠋⢩⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+echo %satoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠧⣤⣦⣤⣄⡀⠀⠀⠀⠀⠀%aftoggle%⠘⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀%astoggle%⠘⣧⠀⠈⣹⡻⠇⢀⣿⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+echo %satoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⣿⣿⣿⣿⣤⣀⡀⠀⠀%aftoggle%⠀⠀⠀⠀⠈⢽⣿⣿⣿⣿⣿⠋⠀⠀⠀⠀%astoggle%⠀⠀⠀⠀⠹⣷⣴⣿⣷⢲⣦⣤⡀⢀⡀⠀⠀⠀⠀⠀⠀
+echo %satoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢿⣿⣿⣿⣿⣿⣿⠟⠀⠀%aftoggle%⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣷⢀⡄⠀⠀⠀%astoggle%⠀⠀⠀⠀⠀⠈⠉⠂⠛⣆⣤⡜⣟⠋⠙⠂⠀⠀⠀⠀⠀
+echo %satoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⣿⣿⣿⣿⠟⠀⠀⠀%aftoggle%⠀⠀⠀⠀⠀⠘⣿⣿⣿⣿⠉⣿⠃⠀⠀⠀%octoggle%⠀⠀⠀⠀⠀⠀⠀⣤⣾⣿⣿⣿⣿⣆⠀⠰⠄⠀⠉⠀⠀
+echo %satoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣸⣿⣿⡿⠃⠀⠀⠀⠀%aftoggle%⠀⠀⠀⠀⠀⠀⢹⣿⡿⠃⠀⠀⠀⠀⠀⠀%octoggle%⠀⠀⠀⠀⠀⠀⠀⢻⣿⠿⠿⣿⣿⣿⠇⠀⠀⢀⠀⠀⠀
+echo %satoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣿⡿⠛⠀⠀⠀⠀⠀⠀%aftoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀%octoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢻⡇⠀⠀⢀⣼⠗⠀⠀
+echo %satoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⠃⣀⠀⠀⠀⠀⠀⠀%aftoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀%octoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠁⠀⠀⠀
+echo %satoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠒⠀⠀⠀⠀⠀⠀⠀%aftoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+echo.
+goto commandline
+:error
+echo.
+echo %brightwhite%[%brightred%*%brightwhite%] Rate Limited!
+echo %brightwhite%[%brightred%*%brightwhite%] Please Try Again Later
+echo %brightred%
+echo.
+echo   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣄⣠⣀⡀⣀⣠⣤⣤⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+echo ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣄⢠⣠⣼⣿⣿⣿⣟⣿⣿⣿⣿⣿⣿⣿⣿⡿⠋⠀⢠⣤⣦⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠰⢦⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+echo ⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⣟⣾⣿⣽⣿⣿⣅⠈⠉⠻⣿⣿⣿⣿⣿⡿⠇⠀⠀⠀⠉⠀⠀⠀⠀⠀⢀⡶⠒⢉⡀⢠⣤⣶⣶⣿⣷⣆⣀⡀⠀⢲⣖⠒⠀⠀⠀⠀⠀⠀⠀
+echo ⢀⣤⣾⣶⣦⣤⣤⣶⣿⣿⣿⣿⣿⣿⣽⡿⠻⣷⣀⠀⢻⣿⣿⣿⡿⠟⠀⠀⠀⠀ ⣤⣶⣶⣤⣀⣀⣬⣷⣦⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣦⣤⣦⣼⣀⠀
+echo ⠈⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠛⠓⣿⣿⠟⠁⠘⣿⡟⠁⠀⠘⠛⠁⢠⣾⣿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠏⠙⠁
+echo ⠀⠸⠟⠋⠀⠈⠙⣿⣿⣿⣿⣿⣿⣷⣦⡄⣿⣿⣿⣆⠀⠀⠀⠀ ⠀⠀⠀⣼⣆⢘⣿⣯⣼⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡉⠉⢱⡿⠀⠀⠀⠀⠀
+echo ⠀⠀⠀⠀⠀⠀⠀⠘⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣟⡿⠦⠀⠀⠀⠀⠀⠀⠀⠙⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⡗⠀⠈⠀⠀⠀⠀⠀⠀
+echo ⠀⠀⠀⠀⠀⠀⠀⠀⢻⣿⣿⣿⣿⣿⣿⣿⣿⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⢿⣿⣉⣿⡿⢿⢷⣾⣾⣿⣞⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠋⣠⠟⠀⠀⠀⠀⠀⠀⠀⠀
+echo ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⣿⣿⣿⠿⠿⣿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣾⣿⣿⣷⣦⣶⣦⣼⣿⣿⣿⣿⣿⣿ ⣿⣿⣿⣿⣿⣿⣿⣿⣷⠈⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀
+echo ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠻⣿⣤⡖⠛⠶⠤⡀⠀⠀⠀⠀⠀⠀⠀⢰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠁⠙⣿⣿⠿⢻⣿⣿⡿⠋⢩⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+echo ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠧⣤⣦⣤⣄⡀⠀⠀⠀⠀⠀⠘⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠘⣧⠀⠈⣹⡻⠇⢀⣿⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+echo ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⣿⣿⣿⣿⣤⣀⡀⠀⠀⠀⠀⠀⠀⠈⢽⣿⣿⣿⣿⣿⠋⠀⠀⠀⠀⠀⠀⠀⠀⠹⣷⣴⣿⣷⢲⣦⣤⡀⢀⡀⠀⠀⠀⠀⠀⠀
+echo ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢿⣿⣿⣿⣿⣿⣿⠟⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣷⢀⡄⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠂⠛⣆⣤⡜⣟⠋⠙⠂⠀⠀⠀⠀⠀
+echo ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⣿⣿⣿⣿⠟⠀⠀⠀⠀⠀⠀⠀⠀⠘⣿⣿⣿⣿⠉⣿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣤⣾⣿⣿⣿⣿⣆⠀⠰⠄⠀⠉⠀⠀
+echo ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣸⣿⣿⡿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⣿⡿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢻⣿⠿⠿⣿⣿⣿⠇⠀⠀⢀⠀⠀⠀
+echo ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣿⡿⠛⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢻⡇⠀⠀⢀⣼⠗⠀⠀
+echo ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⠃⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠁⠀⠀⠀
+echo ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠒⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+echo.
+goto commandline
+
+:contshow
+set /p showcont=%brightwhite%Please Choose A Continent To Display: 
+:: Toggle variables initialization
+::find countrycode
+if "%showcont%"=="SA" set "countrycode=SA" && goto continuecont
+if "%showcont%"=="EU" set "countrycode=EU" && goto continuecont
+if "%showcont%"=="OC" set "countrycode=OC" && goto continuecont
+if "%showcont%"=="AS" set "countrycode=AS" && goto continuecont
+if "%showcont%"=="AF" set "countrycode=AF" && goto continuecont
+if "%showcont%"=="NA" set "countrycode=NA" && goto continuecont
+if "%showcont%"=="sa" set "countrycode=SA" && goto continuecont
+if "%showcont%"=="eu" set "countrycode=EU" && goto continuecont
+if "%showcont%"=="oc" set "countrycode=OC" && goto continuecont
+if "%showcont%"=="as" set "countrycode=AS" && goto continuecont
+if "%showcont%"=="af" set "countrycode=AF" && goto continuecont
+if "%showcont%"=="na" set "countrycode=NA" && goto continuecont 
+echo %brightred%Please Enter A Valid Continent Code && goto commandline
+:: Change color
+:continuecont
+set "natoggle=%white%"
+set "satoggle=%white%"
+set "eutoggle=%white%"
+set "aftoggle=%white%"
+set "astoggle=%white%"
+set "octoggle=%white%"
+if "%countrycode%"=="NA" set "natoggle=%brightred%"
+if "%countrycode%"=="SA" set "satoggle=%brightred%"
+if "%countrycode%"=="EU" set "eutoggle=%brightred%"
+if "%countrycode%"=="AF" set "aftoggle=%brightred%"
+if "%countrycode%"=="AS" set "astoggle=%brightred%"
+if "%countrycode%"=="OC" set "octoggle=%brightred%"
+echo.
+echo %brightwhite%[%brightred%*%brightwhite%] Continent: %countrycode%
+echo %natoggle%  ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣄⣠⣀⡀⣀⣠⣤⣤⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+echo %natoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣄⢠⣠⣼⣿⣿⣿⣟⣿⣿⣿⣿⣿⣿⣿⣿⡿⠋⠀⠀%eutoggle%⠀⢠⣤⣦⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀%astoggle%⠰⢦⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+echo %natoggle%⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⣟⣾⣿⣽⣿⣿⣅⠈⠉⠻⣿⣿⣿⣿⣿⡿⠇⠀⠀⠀%eutoggle%⠀⠀⠉⠀⠀⠀⠀⠀⢀⡶⠒⢉⡀%astoggle%⢠⣤⣶⣶⣿⣷⣆⣀⡀⠀⢲⣖⠒⠀⠀⠀⠀⠀⠀⠀
+echo %natoggle%⢀⣤⣾⣶⣦⣤⣤⣶⣿⣿⣿⣿⣿⣿⣽⡿⠻⣷⣀⠀⢻⣿⣿⣿⡿⠟⠀⠀⠀%eutoggle%⠀⠀⠀⣤⣶⣶⣤⣀⣀⣬⣷⣦%astoggle%⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣦⣤⣦⣼⣀⠀
+echo %natoggle%⠈⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠛⠓⣿⣿⠟⠁⠘⣿⡟⠁⠀⠘⠛⠁%eutoggle%⠀⠀⢠⣾⣿⢿⣿⣿⣿⣿⣿%astoggle%⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠏⠙⠁
+echo %natoggle%⠀⠸⠟⠋⠀⠈⠙⣿⣿⣿⣿⣿⣿⣷⣦⡄⣿⣿⣿⣆⠀⠀⠀⠀⠀%eutoggle%⠀⠀⠀⣼⣆⢘⣿⣯⣼⣿⣿⣿⣿⣿%astoggle%⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡉⠉⢱⡿⠀⠀⠀⠀⠀
+echo %natoggle%⠀⠀⠀⠀⠀⠀⠀⠘⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣟⡿⠦⠀⠀⠀⠀⠀%eutoggle%⠀⠀⠙⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿%astoggle%⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⡗⠀⠈⠀⠀⠀⠀⠀⠀
+echo %natoggle%⠀⠀⠀⠀⠀⠀⠀⠀⢻⣿⣿⣿⣿⣿⣿⣿⣿⠋⠁⠀⠀⠀⠀⠀⠀⠀%eutoggle%⠀⠀⢿⣿⣉⣿⡿⢿⢷⣾⣾⣿⣞%astoggle%⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠋⣠⠟⠀⠀⠀⠀⠀⠀⠀⠀
+echo %natoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⣿⣿⣿⠿⠿⣿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀%aftoggle%⠀⣀⣾⣿⣿⣷⣦⣶⣦⣼⣿⣿%astoggle%⣿⣿⣿⣿ ⣿⣿⣿⣿⣿⣿⣿⣿⣷⠈⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀
+echo %natoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠻⣿⣤⡖⠛⠶⠤⡀⠀⠀⠀⠀⠀⠀⠀%aftoggle%⢰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿%astoggle%⣿⡿⠁⠙⣿⣿⠿⢻⣿⣿⡿⠋⢩⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+echo %satoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠧⣤⣦⣤⣄⡀⠀⠀⠀⠀⠀%aftoggle%⠘⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀%astoggle%⠘⣧⠀⠈⣹⡻⠇⢀⣿⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+echo %satoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⣿⣿⣿⣿⣤⣀⡀⠀⠀%aftoggle%⠀⠀⠀⠀⠈⢽⣿⣿⣿⣿⣿⠋⠀⠀⠀⠀%astoggle%⠀⠀⠀⠀⠹⣷⣴⣿⣷⢲⣦⣤⡀⢀⡀⠀⠀⠀⠀⠀⠀
+echo %satoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢿⣿⣿⣿⣿⣿⣿⠟⠀⠀%aftoggle%⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣷⢀⡄⠀⠀⠀%astoggle%⠀⠀⠀⠀⠀⠈⠉⠂⠛⣆⣤⡜⣟⠋⠙⠂⠀⠀⠀⠀⠀
+echo %satoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⣿⣿⣿⣿⠟⠀⠀⠀%aftoggle%⠀⠀⠀⠀⠀⠘⣿⣿⣿⣿⠉⣿⠃⠀⠀⠀%octoggle%⠀⠀⠀⠀⠀⠀⠀⣤⣾⣿⣿⣿⣿⣆⠀⠰⠄⠀⠉⠀⠀
+echo %satoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣸⣿⣿⡿⠃⠀⠀⠀⠀%aftoggle%⠀⠀⠀⠀⠀⠀⢹⣿⡿⠃⠀⠀⠀⠀⠀⠀%octoggle%⠀⠀⠀⠀⠀⠀⠀⢻⣿⠿⠿⣿⣿⣿⠇⠀⠀⢀⠀⠀⠀
+echo %satoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣿⡿⠛⠀⠀⠀⠀⠀⠀%aftoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀%octoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢻⡇⠀⠀⢀⣼⠗⠀⠀
+echo %satoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⠃⣀⠀⠀⠀⠀⠀⠀%aftoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀%octoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠁⠀⠀⠀
+echo %satoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠒⠀⠀⠀⠀⠀⠀⠀%aftoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+echo.
 goto commandline
