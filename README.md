@@ -13,9 +13,10 @@
 
 ## Installation
 ### Install Using Github
-- ✅ [GitHub ZIP](https://github.com/sjapanwala/netwise/archive/refs/heads/main.zip)
-- ✅ [OpenSource GITHUB Script](https://github.com/sjapanwala/netwise/blob/main/netwise.cmd)
-- ✅ [OpenSource GITHUB Script (RAW)](https://raw.githubusercontent.com/sjapanwala/netwise/main/netwise.cmd)
+- ✅ [GitHub ZIP (Both OpenSource + EXE)](https://github.com/sjapanwala/netwise/archive/refs/heads/main.zip)
+- ✅ [OpenSource GITHUB Script (OpenSource)](https://github.com/sjapanwala/netwise/blob/main/netwise.cmd)
+- - ✅ [Executable File Script (EXE))](https://github.com/sjapanwala/netwise/raw/main/netwise.exe)
+- ✅ [OpenSource GITHUB Script (RAW, OpenSource))](https://raw.githubusercontent.com/sjapanwala/netwise/main/netwise.cmd)
 
 ## Usage + Commands
 #### Remember: Case Matters! Most commands are used with lowercase unless specified.
