@@ -52,7 +52,7 @@ FOR /F %%a IN ('curl -s https://ipv4.icanhazip.com/') DO set localip=%%a
 cls
 if %banned%==True goto banned
 if not %displaynotifs%==True goto commandline
-if not %cd% == %targetdir% goto plantnoti
+if not %cd% == %targetdir% set direrror=True && goto plantnoti
 goto commandline
 :plantnoti
 echo ┌─(%brightblue%Please Plant This File Into %brightgreen%%targetdir%%brightblue% For Full Functionality)%white%
@@ -129,6 +129,7 @@ if "%command%"=="tracepath-web" goto connectpathweb
 ::update
 if "%command%"=="update-h" goto updatehelp
 if "%command%"=="update-a" goto updateall
+if "%command%"=="update-r" goto updatepackets
 
 
 
@@ -184,31 +185,24 @@ echo.
 goto commandline
 :allhelp
 echo.
-echo %brightwhite%┌───────────────────┐┌───────────────────┐┌───────────────────┐┌───────────────────┐┌───────────────────┐
-echo │ All Help/Commands ││ Developed: 3/2024 ││ Dev: sjapanwala   ││ Commands: 34      ││ NetWise Terminal  │
-echo └───────────────────┘└───────────────────┘└───────────────────┘└───────────────────┘└───────────────────┘
-echo ┌───────────────────────────────────────────────────┐┌──────────────────────────────────────────────────┐
-echo │ %brightgreen%https://github.com/sjapanwala/netwise%brightwhite%             ││ %brightgreen%https://github.com/sjapanwala%brightwhite%                    │
-echo └───────────────────────────────────────────────────┘└──────────────────────────────────────────────────┘ 
-echo.
 echo [%brightred%*%brightwhite%] General Help   [%brightred%*%brightwhite%] Root Help   [%brightred%*%brightwhite%] Insert Help   [%brightred%*%brightwhite%] IP Display Help    [%brightred%*%brightwhite%] Ping Help
-echo ├─(help)           ├─(root-h)      ├─(insert-h)      ├─(ipdisplay-h)        ├─(ping-h)
-echo ├─(help-a)         ├─(root-plant)  ├─(insert-ip)     ├─(ipdisplay-t)        ├─(ping-t)
-echo ├─(docu)                           ├─(insert-api)    ├─(ipdisplay-t2)       ├─(ping-tb)
-echo ├─(readme)                                           ├─(ipdisplay-l)
-echo ├─(cls/clear)
-echo ├─(swusr)
-echo ├─(info)
-echo ├─(relaunch)
-echo ├─(comstruc)
-echo ├─(credit)
+echo ├─ help            ├─ root-h       ├─ insert-h       ├─ ipdisplay-h         ├─ ping-h 
+echo ├─ help-a          ├─ root-plant   ├─ insert-ip      ├─ ipdisplay-t         ├─ ping-t 
+echo ├─ docu                            ├─ insert-api     ├─ ipdisplay-t2        ├─ ping-tb 
+echo ├─ readme                                            ├─ ipdisplay-l 
+echo ├─ cls/clear 
+echo ├─ swusr 
+echo ├─ info 
+echo ├─ relaunch 
+echo ├─ comstruc 
+echo ├─ credit 
 echo.
 echo [%brightred%*%brightwhite%] Testing Help   [%brightred%*%brightwhite%] Dis Help    [%brightred%*%brightwhite%] Generate IP   [%brightred%*%brightwhite%] TracePath Help     [%brightred%*%brightwhite%] Update Help
-echo ├─(test-h)         ├─(dis-h)       ├─(genip-h)       ├─(tracepath-h)        ├─(update-h)
-echo ├─(test-net)       ├─(dis-notif)   ├─(genip-create)  ├─(tracepath-t)        ├─(update-a)
-echo ├─(test-cl)                        ├─(genip-loop)    ├─(tracepath-web)
-echo ├─(test-ban)
-echo ├─(test-unban)
+echo ├─ test-h          ├─ dis-h        ├─ genip-h        ├─ tracepath-h         ├─ update-h 
+echo ├─ test-net        ├─ dis-notif    ├─ genip-create   ├─ tracepath-t         ├─ update-a 
+echo ├─ test-cl                         ├─ genip-loop     ├─ tracepath-web       ├─ update-r
+echo ├─ test-ban 
+echo ├─ test-unban 
 echo.
 echo For More Details About a Command, Enter "%brightgreen%(commandname)-h%brightwhite%"
 goto commandline
@@ -320,6 +314,10 @@ echo %brightwhite%CommandLine :-------: %darkred%%shell%
 echo %brightwhite%Host :--------------: %darkred%%host%
 echo %brightwhite%Host CPU :----------: %darkred%%CPU%
 echo %brightwhite%Host OS :-----------: %darkred%%OS%
+echo.
+echo %brightwhite%┌───────────────────────────────────────────────────┐┌──────────────────────────────────────────────────┐
+echo │ %brightgreen%https://github.com/sjapanwala/netwise%brightwhite%             ││ %brightgreen%https://github.com/sjapanwala%brightwhite%                    │
+echo └───────────────────────────────────────────────────┘└──────────────────────────────────────────────────┘ 
 echo.
 goto commandline
 
@@ -677,4 +675,47 @@ echo %white%Note: Terminal Refreshing in 5 Seconds, Wait or Press Any Key.
 timeout 5 >nul
 ::rename ".netwise" "netwise.bat"
 start netwise.cmd && exit
+goto commandline
+
+:updatepackets
+echo.
+set /p choice=%brightwhite%Scan For Missing Files(Y/N)?: 
+if %choice%==y goto search
+if %choice%==Y goto search
+if %choice%==N echo %brightyellow%Repair Abborted && goto commandline
+if %choice%==n echo %brightyellow%Repair Abborted && goto commandline
+:search
+:: scan
+if exist C:\Users\%username%\.config\netwise set configfolder=True
+if exist C:\Users\%username%\.config\netwise\dump set dumpfolder=True
+if exist C:\Users\%username%\.config\netwise\logs set logfolder=True
+if exist C:\Users\%username%\.config\netwise\errors set errorfolder=True
+:: notify
+echo.
+echo Config Folder = %configfolder%
+echo Dump Folder   = %dumpfolder%
+echo Log Folder    = %logfolder%
+echo Error Folder  = %errorfolder%
+echo.
+set /p choice=%brightwhite%Apply Missing Files? (Y/N)?: 
+if %choice%==y goto applymissingfiles
+if %choice%==Y goto applymissingfiles
+if %choice%==N echo %brightyellow%Repair Abborted && goto commandline
+if %choice%==n echo %brightyellow%Repair Abborted && goto commandline
+:applymissingfiles
+echo %white%Please Wait
+if "%configfolder%" NEQ "True" (
+    md C:\Users\%username%\.config\netwise
+)
+if "%dumpfolder%" NEQ "True" (
+    md C:\Users\%username%\.config\netwise\dump
+)
+if "%logfolder%" NEQ "True" (
+    md C:\Users\%username%\.config\netwise\logs
+)
+if "%errorfolder%" NEQ "True" (
+    md C:\Users\%username%\.config\netwise\error
+)
+echo %brightgreen%Finished Applying Files.
+if %direrror%==True echo %brightred%Please Plant into User File.
 goto commandline
