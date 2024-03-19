@@ -22,8 +22,9 @@ set currentfilename=%~n0%~x0
 ::if %currentfilename%==netwise.cmd if exist netwise.bat start netwise.bat && del netwise.cmd
 ::terminal settings
 set tversion=0.1
-set ttheme=Original
+set ttheme=Original │📍%brightred%Net%brightwhite%Wise
 set shell=Windows
+FOR /F %%a IN ('curl -s https://ipv4.icanhazip.com/') DO set localip=%%a
 for /f "tokens=2 delims==" %%b in ('wmic csproduct get Vendor /value') do set host=%%b
 for /f "tokens=2 delims==" %%c in ('wmic os get caption /value ^| findstr "=" ') do set OS=%%c
 for /f "tokens=2 delims==" %%d in ('wmic cpu get name /value ^| findstr "=" ') do set CPU=%%d
@@ -45,13 +46,13 @@ set banned=False
 set banstatus=UnBanned
 if exist .config\netwise\.banned set banned=True
 set banreason=SpamBot
-title NetWise📍
+title %username%@%computername% │ 📍 NetWise Terminal
 ::curl vars
-FOR /F %%a IN ('curl -s https://ipv4.icanhazip.com/') DO set localip=%%a
 :startup
 cls
 if %banned%==True goto banned
 if not %displaynotifs%==True goto commandline
+if %countercool%==True echo %brightyellow%⚠️: Please Refrain From Using IP Services %brightgreen%For 5 Minuites%brightyellow% In Order To Prevent Being Banned%brightwhite%
 if not %cd% == %targetdir% set direrror=True && goto plantnoti
 goto commandline
 :plantnoti
@@ -59,14 +60,13 @@ echo ┌─(%brightblue%Please Plant This File Into %brightgreen%%targetdir%%bri
 echo │
 echo ├─'%white%Use "%brightgreen%root-plant%white%" as root user to plant this file'
 echo └─'%white%Plant this file to not show this message again, or type "%brightgreen%disable-notif%white%" to temporarily disable this message'
-if %countercool%==True echo %brightyellow%⚠️: Please Refrain From Using IP Services %brightgreen%For 5 Minuites%brightyellow% In Order To Prevent Being Banned
 :commandline
 echo %brightwhite%
 echo ┌───(%brightred%%termusername%%brightwhite%@%brightred%%computername%%brightwhite%)-[%brightpurple%%targetip%%brightwhite%]
 set /p command=└─%brightred%!%brightwhite%
 :: general commands
 if "%command%"=="docu" goto docu
-if "%command%"=="exit" exit
+if "%command%"=="exit" goto exit
 if "%command%"=="comstruc" goto comstruc
 if "%command%"=="readme" start https://github.com/sjapanwala/netwise && goto commandline
 if "%command%"=="credit" start https://github.com/sjapanwala && goto commandline
@@ -78,6 +78,7 @@ if "%command%"=="swusr" goto switchuser
 if "%command%"=="info" goto info
 if "%command%"=="relaunch" start %currentfilename% && exit
 if "%command%"=="comstruc" goto comstruc
+if "%command%"=="links" goto links
 
 
 
@@ -122,6 +123,10 @@ if "%command%"=="geoip-h" goto geoiphelp
 if "%command%"=="geoip-t" goto geoiptarg
 if "%command%"=="geoip-s" goto contshow
 
+::pscan
+if "%command%"=="pscan-h" goto pscanhelp
+if "%command%"=="pscan-l" goto plist
+if "%command%"=="pscan-t" goto pscantarget
 
 
 ::whois
@@ -201,6 +206,7 @@ echo ├─ info
 echo ├─ relaunch 
 echo ├─ comstruc 
 echo ├─ credit 
+echo ├─ links
 echo.
 echo [%brightred%*%brightwhite%] Testing Help   [%brightred%*%brightwhite%] Dis Help    [%brightred%*%brightwhite%] Generate IP   [%brightred%*%brightwhite%] TracePath Help     [%brightred%*%brightwhite%] Update Help
 echo ├─ test-h          ├─ dis-h        ├─ genip-h        ├─ tracepath-h         ├─ update-h 
@@ -209,10 +215,10 @@ echo ├─ test-cl                         ├─ genip-loop     ├─ tracepa
 echo ├─ test-ban 
 echo ├─ test-unban 
 echo.
-echo [%brightred%*%brightwhite%] Geographic IP
-echo ├─ geoip-h
-echo ├─ geoip-t
-echo ├─ geoip-s
+echo [%brightred%*%brightwhite%] Geographic IP  [%brightred%*%brightwhite%] Port Scanner
+echo ├─ geoip-h         ├─ pscan-h
+echo ├─ geoip-t         ├─ pscan-l
+echo ├─ geoip-s         ├─ pscan-t
 echo.
 echo For More Details About a Command, Enter "%brightgreen%(commandname)-h%brightwhite%"
 goto commandline
@@ -305,32 +311,32 @@ if %displaynotifs%==False echo %brightyellow%Notifications Are Already Disabled 
 
 
 :info
-echo General Information
+echo                                              General Information,
 echo.
-echo %brightwhite%Current User :------: %darkred%%termusername%
-echo %brightwhite%User Permissions :--: %darkred%%userpermission%
-echo %brightwhite%Local IP :----------: %darkred%%localip%
-echo %brightwhite%IP Type :-----------: %darkred%%iptype%
-echo %brightwhite%Available IP Type :-: %darkred%IPV4,IPV6
-echo %brightwhite%Local Domain :------: %darkred%%userdomain%
-echo %brightwhite%Safety Domain :-----: %darkred%%safetydomain%
-echo %brightwhite%Ban Status :--------: %darkred%%banstatus%
+echo                                              %brightwhite%Current User :------: %darkred%%termusername%@%computername%
+echo         %brightred%             _   __     __           %brightwhite%User Permissions :--: %darkred%%userpermission%
+echo         %brightred%            / │ / /__  / /_          %brightwhite%Local IP :----------: %darkred%%localip%
+echo         %brightred%           /  │/ / _ \/ __/          %brightwhite%IP Type :-----------: %darkred%%iptype%
+echo         %brightred%          / /│  /  __/ /_            %brightwhite%Available IP Type :-: %darkred%IPV4,IPV6
+echo         %brightwhite% _     %brightred%  /_/ │_/\___/\__/            %brightwhite%Local Domain :------: %darkred%%userdomain%
+echo         %brightwhite%│ │     / (_)_______                 %brightwhite%Safety Domain :-----: %darkred%%safetydomain%
+echo         %brightwhite%│ │ /│ / / / ___/ _ \                %brightwhite%Ban Status :--------: %darkred%%banstatus%
+echo         %brightwhite%│ │/ │/ / (__  )  __/                %brightwhite%Version :-----------: %darkred%%tversion%
+echo         %brightwhite%│__/│__/_/____/\___/                 %brightwhite%Theme :-------------: %darkred%%ttheme%
+echo                                              %brightwhite%CommandLine :-------: %darkred%%shell%
+echo                                              %brightwhite%Host :--------------: %darkred%%host%
+echo                                              %brightwhite%Host CPU :----------: %darkred%%CPU%
+echo                                              %brightwhite%Host OS :-----------: %darkred%%OS% 
 echo.
-echo %brightwhite%Terminal Information
-echo.
-echo %brightwhite%Version :-----------: %darkred%%tversion%
-echo %brightwhite%Theme :-------------: %darkred%%ttheme%
-echo %brightwhite%CommandLine :-------: %darkred%%shell%
-echo %brightwhite%Host :--------------: %darkred%%host%
-echo %brightwhite%Host CPU :----------: %darkred%%CPU%
-echo %brightwhite%Host OS :-----------: %darkred%%OS%
+goto commandline
+
+:links
 echo.
 echo %brightwhite%┌───────────────────────────────────────────────────┐┌──────────────────────────────────────────────────┐
 echo │ %brightgreen%https://github.com/sjapanwala/netwise%brightwhite%             ││ %brightgreen%https://github.com/sjapanwala%brightwhite%                    │
 echo └───────────────────────────────────────────────────┘└──────────────────────────────────────────────────┘ 
 echo.
 goto commandline
-
 :inserthelp
 echo.
 echo ╔Insert Help
@@ -753,6 +759,7 @@ set "aftoggle=%white%"
 set "astoggle=%white%"
 set "octoggle=%white%"
 ::find countrycode
+set "countrycode=ER"
 if %geolocation%==AF set "countrycode=AF"
 if %geolocation%==AL set "countrycode=EU"
 if %geolocation%==DZ set "countrycode=AF"
@@ -995,7 +1002,6 @@ if %geolocation%==EH set "countrycode=AF"
 if %geolocation%==YE set "countrycode=AS"
 if %geolocation%==ZM set "countrycode=AF"
 if %geolocation%==ZW set "countrycode=AF"
-set "countrycode=ER"
 
 :: Change color
 if "%countrycode%"=="NA" set "natoggle=%brightred%"
@@ -1108,6 +1114,83 @@ echo %satoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⣿⣿⣿�
 echo %satoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣸⣿⣿⡿⠃⠀⠀⠀⠀%aftoggle%⠀⠀⠀⠀⠀⠀⢹⣿⡿⠃⠀⠀⠀⠀⠀⠀%octoggle%⠀⠀⠀⠀⠀⠀⠀⢻⣿⠿⠿⣿⣿⣿⠇⠀⠀⢀⠀⠀⠀
 echo %satoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣿⡿⠛⠀⠀⠀⠀⠀⠀%aftoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀%octoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢻⡇⠀⠀⢀⣼⠗⠀⠀
 echo %satoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⠃⣀⠀⠀⠀⠀⠀⠀%aftoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀%octoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠁⠀⠀⠀
-echo %satoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠒⠀⠀⠀⠀⠀⠀⠀%aftoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+echo %satoggle%⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠒⠀⠀⠀⠀⠀⠀⠀%aftoggle%
 echo.
 goto commandline
+
+:pscanhelp
+echo.
+echo ╔PortScanner Help
+echo ╚:Check if a port is open on a certain IP server
+echo.
+echo pscan-h :----: shows this help menu
+echo pscan-t :----: scans the target ip
+echo pscan-l :----: lists ports and thier abilities
+echo.
+goto commandline
+
+:plist
+echo.
+echo %brightwhite% Common Open Ports,
+echo.
+echo %brightwhite%[%brightred%*%brightwhite%]   20 - FTP 
+echo %brightwhite%[%brightred%*%brightwhite%]   21 - FTP
+echo %brightwhite%[%brightred%*%brightwhite%]   22 - SSH
+echo %brightwhite%[%brightred%*%brightwhite%]   25 - SMTP
+echo %brightwhite%[%brightred%*%brightwhite%]   53 - DNS
+echo %brightwhite%[%brightred%*%brightwhite%]   80 - HTTP
+echo %brightwhite%[%brightred%*%brightwhite%]  123 - NTP
+echo %brightwhite%[%brightred%*%brightwhite%]  179 - BGP
+echo %brightwhite%[%brightred%*%brightwhite%]  443 - HTTPS
+echo %brightwhite%[%brightred%*%brightwhite%]  500 - ISAKMP
+echo %brightwhite%[%brightred%*%brightwhite%] 3389 - RRDP
+echo.
+goto commandline
+
+:pscantarget
+if %targetip%==none echo %brightred% No IP Set, Please Set A Target IP First%brightwhite% && goto commandline
+echo.
+set /p port=%brightwhite%Please Enter A Port: 
+set portinfo=UnCommon Port Number
+if "%port%"=="20" set portinfo=FTP
+if "%port%"=="21" set portinfo=FTP
+if "%port%"=="22" set portinfo=SSH
+if "%port%"=="25" set portinfo=SMTP
+if "%port%"=="53" set portinfo=DNS
+if "%port%"=="80" set portinfo=HTTP
+if "%port%"=="123" set portinfo=NTP
+if "%port%"=="179" set portinfo=BGP
+if "%port%"=="443" set portinfo=HTTPS
+if "%port%"=="500" set portinfo=ISAKMP
+if "%port%"=="3389" set portinfo=RRDP
+
+
+
+
+
+
+
+
+
+
+echo.
+echo IP in Question   [%targetip%]
+echo Port In Question [%port% - %portinfo%]
+:scanchoice
+set /p choice=%brightyellow%⚠️ SECURITY WARNING: Warning, You are about to scan a foreign server. Continue? (Y/N): 
+if %choice%==y goto continuescan
+if %choice%==Y goto continuescan
+if %choice%==N echo %brightyellow%Scan Abborted && goto commandline
+if %choice%==n echo %brightyellow%Scan Abborted && goto commandline
+goto scanchoice
+:continuescan
+echo %brightred%
+powershell -Command "Test-NetConnection -Port %port% %targetip%"
+echo.
+goto commandline
+
+
+:exit
+echo.
+echo 👋 GoodBye!
+timeout 2 >nul
