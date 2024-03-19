@@ -21,7 +21,7 @@ set currentfilename=%~n0%~x0
 ::if %currentfilename%==netwise.bat if exist netwise.cmd start netwise.cmd && del netwise.bat
 ::if %currentfilename%==netwise.cmd if exist netwise.bat start netwise.bat && del netwise.cmd
 ::terminal settings
-set tversion=0.1
+set tversion=0.4
 set ttheme=Original │📍%brightred%Net%brightwhite%Wise
 set shell=Windows
 FOR /F %%a IN ('curl -s https://ipv4.icanhazip.com/') DO set localip=%%a
