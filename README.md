@@ -1,6 +1,6 @@
 # **💻 NetWise** 
 ## Quick Links
-[Download](https://github.com/sjapanwala/netwise/archive/refs/heads/main.zip) | [Updates]([https://github.com/sjapanwala/netwise/blob/main/updates.md])
+[Download](https://github.com/sjapanwala/netwise/archive/refs/heads/main.zip) | [Updates](https://github.com/sjapanwala/netwise/blob/main/updates.md)
 ## Table of Contents
 - [Description](#what-is-netwise)
 - [Installation](#installation)
