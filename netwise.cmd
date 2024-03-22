@@ -21,7 +21,7 @@ set currentfilename=%~n0%~x0
 ::if %currentfilename%==netwise.bat if exist netwise.cmd start netwise.cmd && del netwise.bat
 ::if %currentfilename%==netwise.cmd if exist netwise.bat start netwise.bat && del netwise.cmd
 ::terminal settings
-set tversion=0.4
+set tversion=0.5
 set ttheme=Original │📍%brightred%Net%brightwhite%Wise
 set shell=Windows
 FOR /F %%a IN ('curl -s https://ipv4.icanhazip.com/') DO set localip=%%a
@@ -48,6 +48,59 @@ if exist .config\netwise\.banned set banned=True
 set banreason=SpamBot
 title %username%@%computername% │ 📍 NetWise Terminal
 ::curl vars
+::check if files are made
+
+if exist "C:\Users\%username%\.config" (
+    set "configfolder=True"
+) else (
+    set "configfolder=False"
+) 
+if exist "C:\Users\%username%\.config\netwise" (
+    set rootfolder=True
+) else (
+    set rootfolder=False
+)
+
+if "%configfolder%"=="True" (
+    :: Process to check missing folders,
+    :: make missing folders
+    
+    if exist "C:\Users\%username%\.config\netwise\.dump" (
+        set "dumpfolder=True"
+    ) else (
+        set "dumpfolder=False"
+    ) 
+    if exist "C:\Users\%username%\.config\netwise\.logs" (
+        set "logfolder=True"
+    ) else (
+        set "logfolder=False"
+    )
+    if exist "C:\Users\%username%\.config\netwise\.errors" (
+        set "errorfolder=True"
+    ) else (
+        set "errorfolder=False"
+    )
+    if exist "C:\Users\%username%\.config\netwise\.updates" (
+        set "updatefolder=True"
+    ) else (
+        set "updatefolder=False"
+    )
+    if exist "C:\Users\%username%\.config\netwise\.savedstates" (
+        set "savedstatefolder=True"
+    ) else (
+        set "savedstatefolder=False"
+    )
+    set "configmessage=None"
+    
+) else (
+    set "configfolder=False"
+    set "configmessage=Config File Has Not Been Created, Please Repair Updates NOW! (update-r)"
+)
+set filecounter=0
+if "%configfolder%"=="False" md C:\Users\%username%\.config && set /a filecounter+=1
+if "%rootfolder%"=="False" md C:\Users\%username%\.config\netwise && set /a filecounter+=1
+echo %brightgreen%Successfully Created %filecounter% Files! %brightwhite%
+
 :startup
 cls
 if %banned%==True goto banned
@@ -140,8 +193,11 @@ if "%command%"=="tracepath-web" goto connectpathweb
 if "%command%"=="update-h" goto updatehelp
 if "%command%"=="update-a" goto updateall
 if "%command%"=="update-r" goto updatepackets
+if "%command%"=="update-ft" goto updaterepairtree
 
+:: problems
 
+::
 
 goto invalidcommand
 
@@ -212,7 +268,7 @@ echo [%brightred%*%brightwhite%] Testing Help   [%brightred%*%brightwhite%] Dis 
 echo ├─ test-h          ├─ dis-h        ├─ genip-h        ├─ tracepath-h         ├─ update-h 
 echo ├─ test-net        ├─ dis-notif    ├─ genip-create   ├─ tracepath-t         ├─ update-a 
 echo ├─ test-cl                         ├─ genip-loop     ├─ tracepath-web       ├─ update-r
-echo ├─ test-ban 
+echo ├─ test-ban                                                                 ├─ update-ft
 echo ├─ test-unban 
 echo.
 echo [%brightred%*%brightwhite%] Geographic IP  [%brightred%*%brightwhite%] Port Scanner
@@ -365,8 +421,8 @@ if %newip%==%safetydomain% echo %brightyellow%⚠️!: TEMP-TARGET IP AND SAFETY
 set /p choice=Set %newip% as Target IP? (Y/N): 
 if %choice%==y goto settarget
 if %choice%==Y goto settarget
-if %choice%==N echo %brightyellow%IP Set Abborted && goto commandline
-if %choice%==n echo %brightyellow%IP Set Abborted && goto commandline
+if %choice%==N echo %brightyellow%IP Set Aborted && goto commandline
+if %choice%==n echo %brightyellow%IP Set Aborted && goto commandline
 goto setchoiceip
 :settarget
 set targetip=%newip%
@@ -479,8 +535,8 @@ echo.
 set /p choice=%brightyellow%⚠️: You are sending greater than a 100 packets, Continue? (Y/N): 
 if %choice%==y goto continuelen
 if %choice%==Y goto continuelen
-if %choice%==N echo %brightyellow%Ping Set Abborted && goto commandline
-if %choice%==n echo %brightyellow%Ping Set Abborted && goto commandline
+if %choice%==N echo %brightyellow%Ping Set Aborted && goto commandline
+if %choice%==n echo %brightyellow%Ping Set Aborted && goto commandline
 goto lenchoice
 :continuelen
 set pingip= %targetip%
@@ -511,8 +567,8 @@ echo.
 set /p choice=%brightyellow%⚠️: You are sending greater than a 100 packets, Continue? (Y/N): 
 if %choice%==y goto continuelen2
 if %choice%==Y goto continuelen2
-if %choice%==N echo %brightyellow%Ping Set Abborted && goto commandline
-if %choice%==n echo %brightyellow%Ping Set Abborted && goto commandline
+if %choice%==N echo %brightyellow%Ping Set Aborted && goto commandline
+if %choice%==n echo %brightyellow%Ping Set Aborted && goto commandline
 goto lenchoice2
 :continuelen2
 set pingip= %targetip%
@@ -621,8 +677,8 @@ echo.
 set /p choice=Set %generatedip% As TargetIP? (Y/N): 
 if %choice%==y goto settargettrue
 if %choice%==Y goto settargettrue
-if %choice%==N echo %brightyellow%IP Set Abborted && goto commandline
-if %choice%==n echo %brightyellow%IP Set Abborted && goto commandline
+if %choice%==N echo %brightyellow%IP Set Aborted && goto commandline
+if %choice%==n echo %brightyellow%IP Set Aborted && goto commandline
 goto settargetrand
 :settargettrue
 set targetip=%generatedip%
@@ -669,8 +725,8 @@ start %curllink% && goto applyupdate
 set /p applyupdate=%white%Apply Updates? (Y/N)?: 
 if %applyupdate%==y goto applyupdate
 if %applyupdate%==Y goto applyupdate
-if %applyupdate%==N echo %brightyellow%Update Apply Abborted && goto commandline
-if %applyupdate%==n echo %brightyellow%Update Apply Abborted && goto commandline
+if %applyupdate%==N echo %brightyellow%Update Apply Aborted && goto commandline
+if %applyupdate%==n echo %brightyellow%Update Apply Aborted && goto commandline
 :applyupdate
 echo. 
 move C:\Users\%username%\.config\netwise\.updatefile C:\Users\%username%
@@ -695,47 +751,53 @@ goto commandline
 
 :updatepackets
 echo.
-set /p choice=%brightwhite%Scan For Missing Files(Y/N)?: 
-if %choice%==y goto search
-if %choice%==Y goto search
-if %choice%==N echo %brightyellow%Repair Abborted && goto commandline
-if %choice%==n echo %brightyellow%Repair Abborted && goto commandline
-:search
-:: scan
-if exist C:\Users\%username%\.config\netwise set configfolder=True
-if exist C:\Users\%username%\.config\netwise\dump set dumpfolder=True
-if exist C:\Users\%username%\.config\netwise\logs set logfolder=True
-if exist C:\Users\%username%\.config\netwise\errors set errorfolder=True
-:: notify
+if not "%configmessage%"=="None" (
+    echo %configmessage%
+    echo ----------------------
+) else (
+    echo.
+)
+echo ┌─%brightwhite%[%brightred%!%brightwhite%] Importance Levels
+echo ├─[🔴] - Will Not Run Without Setting Up
+echo ├─[🟡] - Limited Functionality, Will Require Setup For Optimization
+echo └─[🟢] - Will Be OK Without Configuring
 echo.
-echo Config Folder = %configfolder%
-echo Dump Folder   = %dumpfolder%
-echo Log Folder    = %logfolder%
-echo Error Folder  = %errorfolder%
+echo ┌─[🔴] │ (.config)      │ config        │ %configfolder% │
+echo ├─[🔴] │ (netwise)      │ netwise/root  │ %rootfolder% │
+echo ├─[🟡] │ (.dump)        │ dump folder   │ %dumpfolder% │
+echo ├─[🔴] │ (.logs)        │ log folder    │ %logfolder% │
+echo ├─[🟡] │ (.error)       │ error folder  │ %errorfolder% │
+echo ├─[🟡] │ (.updates)     │ update folder │ %updatefolder% │ 
+echo └─[🟢] │ (.savedstates) │ SS folder     │ %savedstatefolder% │
 echo.
 set /p choice=%brightwhite%Apply Missing Files? (Y/N)?: 
 if %choice%==y goto applymissingfiles
 if %choice%==Y goto applymissingfiles
-if %choice%==N echo %brightyellow%Repair Abborted && goto commandline
-if %choice%==n echo %brightyellow%Repair Abborted && goto commandline
+if %choice%==N echo %brightyellow%Repair Aborted && goto commandline
+if %choice%==n echo %brightyellow%Repair Aborted && goto commandline
+goto commandline
 :applymissingfiles
-echo %white%Please Wait
-if "%configfolder%" NEQ "True" (
-    md C:\Users\%username%\.config\netwise
-)
-if "%dumpfolder%" NEQ "True" (
-    md C:\Users\%username%\.config\netwise\dump
-)
-if "%logfolder%" NEQ "True" (
-    md C:\Users\%username%\.config\netwise\logs
-)
-if "%errorfolder%" NEQ "True" (
-    md C:\Users\%username%\.config\netwise\error
-)
-echo %brightgreen%Finished Applying Files.
-if %direrror%==True echo %brightred%Please Plant into User File.
+set filecounter=0
+if "%configfolder%"=="False" md C:\Users\%username%\.config && set /a filecounter+=1
+if "%rootfolder%"=="False" md C:\Users\%username%\.config\netwise && set /a filecounter+=1
+if "%dumpfolder%"=="False" md C:\Users\%username%\.config\netwise\.dump && set /a filecounter+=1
+if "%logfolder%"=="False" md C:\Users\%username%\.config\netwise\.logs && set /a filecounter+=1
+if "%errorfolder%"=="False" md C:\Users\%username%\.config\netwise\.errors && set /a filecounter+=1
+if "%updatefolder%"=="False" md C:\Users\%username%\.config\netwise\.updates && set /a filecounter+=1
+if "%savedstatefolder%"=="False" md C:\Users\%username%\.config\netwise\.savedstates && set /a filecounter+=1
+echo %brightgreen%Successfully Created %filecounter% Files!
 goto commandline
 
+:updaterepairtree
+echo %brightwhite%
+echo    📁.config
+echo    └─📁netwise
+echo      ├─📁.dump
+echo      ├─📁.logs
+echo      ├─📁.errors
+echo      ├─📁.updates
+echo      └─📁.savedstates
+goto commandline
 :geoiphelp
 echo.
 echo ╔Geographical IP
@@ -751,6 +813,7 @@ goto commandline
 :geoiptarg
 if %targetip%==none echo %brightred% No IP Set, Please Set A Target IP First%brightwhite% && goto commandline
 FOR /F %%h IN ('curl -s https://ipapi.co/%targetip%/country/') DO set geolocation=%%h
+set geolocationfind=True
 :: Toggle variables initialization
 set "natoggle=%white%"
 set "satoggle=%white%"
@@ -759,249 +822,252 @@ set "aftoggle=%white%"
 set "astoggle=%white%"
 set "octoggle=%white%"
 ::find countrycode
-set "countrycode=ER"
-if %geolocation%==AF set "countrycode=AF"
-if %geolocation%==AL set "countrycode=EU"
-if %geolocation%==DZ set "countrycode=AF"
-if %geolocation%==AS set "countrycode=OC"
-if %geolocation%==AD set "countrycode=EU"
-if %geolocation%==AO set "countrycode=AF"
-if %geolocation%==AI set "countrycode=NA"
-if %geolocation%==AQ set "countrycode=AN"
-if %geolocation%==AG set "countrycode=NA"
-if %geolocation%==AR set "countrycode=SA"
-if %geolocation%==AM set "countrycode=AS"
-if %geolocation%==AW set "countrycode=NA"
-if %geolocation%==AU set "countrycode=OC"
-if %geolocation%==AT set "countrycode=EU"
-if %geolocation%==AZ set "countrycode=AS"
-if %geolocation%==BS set "countrycode=NA"
-if %geolocation%==BH set "countrycode=AS"
-if %geolocation%==BD set "countrycode=AS"
-if %geolocation%==BB set "countrycode=NA"
-if %geolocation%==BY set "countrycode=EU"
-if %geolocation%==BE set "countrycode=EU"
-if %geolocation%==BZ set "countrycode=NA"
-if %geolocation%==BJ set "countrycode=AF"
-if %geolocation%==BM set "countrycode=NA"
-if %geolocation%==BT set "countrycode=AS"
-if %geolocation%==BO set "countrycode=SA"
-if %geolocation%==BA set "countrycode=EU"
-if %geolocation%==BW set "countrycode=AF"
-if %geolocation%==BV set "countrycode=AN"
-if %geolocation%==BR set "countrycode=SA"
-if %geolocation%==IO set "countrycode=AS"
-if %geolocation%==BN set "countrycode=AS"
-if %geolocation%==BG set "countrycode=EU"
-if %geolocation%==BF set "countrycode=AF"
-if %geolocation%==BI set "countrycode=AF"
-if %geolocation%==KH set "countrycode=AS"
-if %geolocation%==CM set "countrycode=AF"
-if %geolocation%==CA set "countrycode=NA"
-if %geolocation%==CV set "countrycode=AF"
-if %geolocation%==KY set "countrycode=NA"
-if %geolocation%==CF set "countrycode=AF"
-if %geolocation%==TD set "countrycode=AF"
-if %geolocation%==CL set "countrycode=SA"
-if %geolocation%==CN set "countrycode=AS"
-if %geolocation%==CX set "countrycode=AS"
-if %geolocation%==CC set "countrycode=AS"
-if %geolocation%==CO set "countrycode=SA"
-if %geolocation%==KM set "countrycode=AF"
-if %geolocation%==CG set "countrycode=AF"
-if %geolocation%==CD set "countrycode=AF"
-if %geolocation%==CK set "countrycode=OC"
-if %geolocation%==CR set "countrycode=NA"
-if %geolocation%==CI set "countrycode=AF"
-if %geolocation%==HR set "countrycode=EU"
-if %geolocation%==CU set "countrycode=NA"
-if %geolocation%==CY set "countrycode=AS"
-if %geolocation%==CZ set "countrycode=EU"
-if %geolocation%==DK set "countrycode=EU"
-if %geolocation%==DJ set "countrycode=AF"
-if %geolocation%==DM set "countrycode=NA"
-if %geolocation%==DO set "countrycode=NA"
-if %geolocation%==EC set "countrycode=SA"
-if %geolocation%==EG set "countrycode=AF"
-if %geolocation%==SV set "countrycode=NA"
-if %geolocation%==GQ set "countrycode=AF"
-if %geolocation%==ER set "countrycode=AF"
-if %geolocation%==EE set "countrycode=EU"
-if %geolocation%==ET set "countrycode=AF"
-if %geolocation%==FK set "countrycode=SA"
-if %geolocation%==FO set "countrycode=EU"
-if %geolocation%==FJ set "countrycode=OC"
-if %geolocation%==FI set "countrycode=EU"
-if %geolocation%==FR set "countrycode=EU"
-if %geolocation%==GF set "countrycode=SA"
-if %geolocation%==PF set "countrycode=OC"
-if %geolocation%==TF set "countrycode=AN"
-if %geolocation%==GA set "countrycode=AF"
-if %geolocation%==GM set "countrycode=AF"
-if %geolocation%==GE set "countrycode=AS"
-if %geolocation%==DE set "countrycode=EU"
-if %geolocation%==GH set "countrycode=AF"
-if %geolocation%==GI set "countrycode=EU"
-if %geolocation%==GR set "countrycode=EU"
-if %geolocation%==GL set "countrycode=NA"
-if %geolocation%==GD set "countrycode=NA"
-if %geolocation%==GP set "countrycode=NA"
-if %geolocation%==GU set "countrycode=OC"
-if %geolocation%==GT set "countrycode=NA"
-if %geolocation%==GG set "countrycode=EU"
-if %geolocation%==GN set "countrycode=AF"
-if %geolocation%==GW set "countrycode=AF"
-if %geolocation%==GY set "countrycode=SA"
-if %geolocation%==HT set "countrycode=NA"
-if %geolocation%==HM set "countrycode=AN"
-if %geolocation%==VA set "countrycode=EU"
-if %geolocation%==HN set "countrycode=NA"
-if %geolocation%==HK set "countrycode=AS"
-if %geolocation%==HU set "countrycode=EU"
-if %geolocation%==IN set "countrycode=AS"
-if %geolocation%==ID set "countrycode=AS"
-if %geolocation%==IR set "countrycode=AS"
-if %geolocation%==IQ set "countrycode=AS"
-if %geolocation%==IE set "countrycode=EU"
-if %geolocation%==IM set "countrycode=EU"
-if %geolocation%==IL set "countrycode=AS"
-if %geolocation%==IT set "countrycode=EU"
-if %geolocation%==JM set "countrycode=NA"
-if %geolocation%==JP set "countrycode=AS"
-if %geolocation%==JE set "countrycode=EU"
-if %geolocation%==JO set "countrycode=AS"
-if %geolocation%==KZ set "countrycode=AS"
-if %geolocation%==KE set "countrycode=AF"
-if %geolocation%==KI set "countrycode=OC"
-if %geolocation%==KP set "countrycode=AS"
-if %geolocation%==KR set "countrycode=AS"
-if %geolocation%==KW set "countrycode=AS"
-if %geolocation%==KG set "countrycode=AS"
-if %geolocation%==LA set "countrycode=AS"
-if %geolocation%==LV set "countrycode=EU"
-if %geolocation%==LB set "countrycode=AS"
-if %geolocation%==LS set "countrycode=AF"
-if %geolocation%==LR set "countrycode=AF"
-if %geolocation%==LY set "countrycode=AF"
-if %geolocation%==LI set "countrycode=EU"
-if %geolocation%==LT set "countrycode=EU"
-if %geolocation%==LU set "countrycode=EU"
-if %geolocation%==MO set "countrycode=AS"
-if %geolocation%==MK set "countrycode=EU"
-if %geolocation%==MG set "countrycode=AF"
-if %geolocation%==MW set "countrycode=AF"
-if %geolocation%==MY set "countrycode=AS"
-if %geolocation%==MV set "countrycode=AS"
-if %geolocation%==ML set "countrycode=AF"
-if %geolocation%==MT set "countrycode=EU"
-if %geolocation%==MH set "countrycode=OC"
-if %geolocation%==MQ set "countrycode=NA"
-if %geolocation%==MR set "countrycode=AF"
-if %geolocation%==MU set "countrycode=AF"
-if %geolocation%==YT set "countrycode=AF"
-if %geolocation%==MX set "countrycode=NA"
-if %geolocation%==FM set "countrycode=OC"
-if %geolocation%==MD set "countrycode=EU"
-if %geolocation%==MC set "countrycode=EU"
-if %geolocation%==MN set "countrycode=AS"
-if %geolocation%==ME set "countrycode=EU"
-if %geolocation%==MS set "countrycode=NA"
-if %geolocation%==MA set "countrycode=AF"
-if %geolocation%==MZ set "countrycode=AF"
-if %geolocation%==MM set "countrycode=AS"
-if %geolocation%==NA set "countrycode=AF"
-if %geolocation%==NR set "countrycode=OC"
-if %geolocation%==NP set "countrycode=AS"
-if %geolocation%==NL set "countrycode=EU"
-if %geolocation%==AN set "countrycode=NA"
-if %geolocation%==NC set "countrycode=OC"
-if %geolocation%==NZ set "countrycode=OC"
-if %geolocation%==NI set "countrycode=NA"
-if %geolocation%==NE set "countrycode=AF"
-if %geolocation%==NG set "countrycode=AF"
-if %geolocation%==NU set "countrycode=OC"
-if %geolocation%==NF set "countrycode=OC"
-if %geolocation%==MP set "countrycode=OC"
-if %geolocation%==NO set "countrycode=EU"
-if %geolocation%==OM set "countrycode=AS"
-if %geolocation%==PK set "countrycode=AS"
-if %geolocation%==PW set "countrycode=OC"
-if %geolocation%==PS set "countrycode=AS"
-if %geolocation%==PA set "countrycode=NA"
-if %geolocation%==PG set "countrycode=OC"
-if %geolocation%==PY set "countrycode=SA"
-if %geolocation%==PE set "countrycode=SA"
-if %geolocation%==PH set "countrycode=AS"
-if %geolocation%==PN set "countrycode=OC"
-if %geolocation%==PL set "countrycode=EU"
-if %geolocation%==PT set "countrycode=EU"
-if %geolocation%==PR set "countrycode=NA"
-if %geolocation%==QA set "countrycode=AS"
-if %geolocation%==RE set "countrycode=AF"
-if %geolocation%==RO set "countrycode=EU"
-if %geolocation%==RU set "countrycode=EU"
-if %geolocation%==RW set "countrycode=AF"
-if %geolocation%==SH set "countrycode=AF"
-if %geolocation%==KN set "countrycode=NA"
-if %geolocation%==LC set "countrycode=NA"
-if %geolocation%==PM set "countrycode=NA"
-if %geolocation%==VC set "countrycode=NA"
-if %geolocation%==WS set "countrycode=OC"
-if %geolocation%==SM set "countrycode=EU"
-if %geolocation%==ST set "countrycode=AF"
-if %geolocation%==SA set "countrycode=AS"
-if %geolocation%==SN set "countrycode=AF"
-if %geolocation%==RS set "countrycode=EU"
-if %geolocation%==SC set "countrycode=AF"
-if %geolocation%==SL set "countrycode=AF"
-if %geolocation%==SG set "countrycode=AS"
-if %geolocation%==SK set "countrycode=EU"
-if %geolocation%==SI set "countrycode=EU"
-if %geolocation%==SB set "countrycode=OC"
-if %geolocation%==SO set "countrycode=AF"
-if %geolocation%==ZA set "countrycode=AF"
-if %geolocation%==GS set "countrycode=AN"
-if %geolocation%==ES set "countrycode=EU"
-if %geolocation%==LK set "countrycode=AS"
-if %geolocation%==SD set "countrycode=AF"
-if %geolocation%==SR set "countrycode=SA"
-if %geolocation%==SJ set "countrycode=EU"
-if %geolocation%==SZ set "countrycode=AF"
-if %geolocation%==SE set "countrycode=EU"
-if %geolocation%==CH set "countrycode=EU"
-if %geolocation%==SY set "countrycode=AS"
-if %geolocation%==TW set "countrycode=AS"
-if %geolocation%==TJ set "countrycode=AS"
-if %geolocation%==TZ set "countrycode=AF"
-if %geolocation%==TH set "countrycode=AS"
-if %geolocation%==TL set "countrycode=AS"
-if %geolocation%==TG set "countrycode=AF"
-if %geolocation%==TK set "countrycode=OC"
-if %geolocation%==TO set "countrycode=OC"
-if %geolocation%==TT set "countrycode=NA"
-if %geolocation%==TN set "countrycode=AF"
-if %geolocation%==TR set "countrycode=EU"
-if %geolocation%==TM set "countrycode=AS"
-if %geolocation%==TC set "countrycode=NA"
-if %geolocation%==TV set "countrycode=OC"
-if %geolocation%==UG set "countrycode=AF"
-if %geolocation%==UA set "countrycode=EU"
-if %geolocation%==AE set "countrycode=AS"
-if %geolocation%==GB set "countrycode=EU"
-if %geolocation%==US set "countrycode=NA"
-if %geolocation%==UM set "countrycode=OC"
-if %geolocation%==UY set "countrycode=SA"
-if %geolocation%==UZ set "countrycode=AS"
-if %geolocation%==VU set "countrycode=OC"
-if %geolocation%==VE set "countrycode=SA"
-if %geolocation%==VN set "countrycode=AS"
-if %geolocation%==VG set "countrycode=NA"
-if %geolocation%==VI set "countrycode=NA"
-if %geolocation%==WF set "countrycode=OC"
-if %geolocation%==EH set "countrycode=AF"
-if %geolocation%==YE set "countrycode=AS"
-if %geolocation%==ZM set "countrycode=AF"
-if %geolocation%==ZW set "countrycode=AF"
+if %geolocationfind%==True (
+    set "countrycode=ER"
+    if %geolocation%==AF set "countrycode=AF"
+    if %geolocation%==AL set "countrycode=EU"
+    if %geolocation%==DZ set "countrycode=AF"
+    if %geolocation%==AS set "countrycode=OC"
+    if %geolocation%==AD set "countrycode=EU"
+    if %geolocation%==AO set "countrycode=AF"
+    if %geolocation%==AI set "countrycode=NA"
+    if %geolocation%==AQ set "countrycode=AN"
+    if %geolocation%==AG set "countrycode=NA"
+    if %geolocation%==AR set "countrycode=SA"
+    if %geolocation%==AM set "countrycode=AS"
+    if %geolocation%==AW set "countrycode=NA"
+    if %geolocation%==AU set "countrycode=OC"
+    if %geolocation%==AT set "countrycode=EU"
+    if %geolocation%==AZ set "countrycode=AS"
+    if %geolocation%==BS set "countrycode=NA"
+    if %geolocation%==BH set "countrycode=AS"
+    if %geolocation%==BD set "countrycode=AS"
+    if %geolocation%==BB set "countrycode=NA"
+    if %geolocation%==BY set "countrycode=EU"
+    if %geolocation%==BE set "countrycode=EU"
+    if %geolocation%==BZ set "countrycode=NA"
+    if %geolocation%==BJ set "countrycode=AF"
+    if %geolocation%==BM set "countrycode=NA"
+    if %geolocation%==BT set "countrycode=AS"
+    if %geolocation%==BO set "countrycode=SA"
+    if %geolocation%==BA set "countrycode=EU"
+    if %geolocation%==BW set "countrycode=AF"
+    if %geolocation%==BV set "countrycode=AN"
+    if %geolocation%==BR set "countrycode=SA"
+    if %geolocation%==IO set "countrycode=AS"
+    if %geolocation%==BN set "countrycode=AS"
+    if %geolocation%==BG set "countrycode=EU"
+    if %geolocation%==BF set "countrycode=AF"
+    if %geolocation%==BI set "countrycode=AF"
+    if %geolocation%==KH set "countrycode=AS"
+    if %geolocation%==CM set "countrycode=AF"
+    if %geolocation%==CA set "countrycode=NA"
+    if %geolocation%==CV set "countrycode=AF"
+    if %geolocation%==KY set "countrycode=NA"
+    if %geolocation%==CF set "countrycode=AF"
+    if %geolocation%==TD set "countrycode=AF"
+    if %geolocation%==CL set "countrycode=SA"
+    if %geolocation%==CN set "countrycode=AS"
+    if %geolocation%==CX set "countrycode=AS"
+    if %geolocation%==CC set "countrycode=AS"
+    if %geolocation%==CO set "countrycode=SA"
+    if %geolocation%==KM set "countrycode=AF"
+    if %geolocation%==CG set "countrycode=AF"
+    if %geolocation%==CD set "countrycode=AF"
+    if %geolocation%==CK set "countrycode=OC"
+    if %geolocation%==CR set "countrycode=NA"
+    if %geolocation%==CI set "countrycode=AF"
+    if %geolocation%==HR set "countrycode=EU"
+    if %geolocation%==CU set "countrycode=NA"
+    if %geolocation%==CY set "countrycode=AS"
+    if %geolocation%==CZ set "countrycode=EU"
+    if %geolocation%==DK set "countrycode=EU"
+    if %geolocation%==DJ set "countrycode=AF"
+    if %geolocation%==DM set "countrycode=NA"
+    if %geolocation%==DO set "countrycode=NA"
+    if %geolocation%==EC set "countrycode=SA"
+    if %geolocation%==EG set "countrycode=AF"
+    if %geolocation%==SV set "countrycode=NA"
+    if %geolocation%==GQ set "countrycode=AF"
+    if %geolocation%==ER set "countrycode=AF"
+    if %geolocation%==EE set "countrycode=EU"
+    if %geolocation%==ET set "countrycode=AF"
+    if %geolocation%==FK set "countrycode=SA"
+    if %geolocation%==FO set "countrycode=EU"
+    if %geolocation%==FJ set "countrycode=OC"
+    if %geolocation%==FI set "countrycode=EU"
+    if %geolocation%==FR set "countrycode=EU"
+    if %geolocation%==GF set "countrycode=SA"
+    if %geolocation%==PF set "countrycode=OC"
+    if %geolocation%==TF set "countrycode=AN"
+    if %geolocation%==GA set "countrycode=AF"
+    if %geolocation%==GM set "countrycode=AF"
+    if %geolocation%==GE set "countrycode=AS"
+    if %geolocation%==DE set "countrycode=EU"
+    if %geolocation%==GH set "countrycode=AF"
+    if %geolocation%==GI set "countrycode=EU"
+    if %geolocation%==GR set "countrycode=EU"
+    if %geolocation%==GL set "countrycode=NA"
+    if %geolocation%==GD set "countrycode=NA"
+    if %geolocation%==GP set "countrycode=NA"
+    if %geolocation%==GU set "countrycode=OC"
+    if %geolocation%==GT set "countrycode=NA"
+    if %geolocation%==GG set "countrycode=EU"
+    if %geolocation%==GN set "countrycode=AF"
+    if %geolocation%==GW set "countrycode=AF"
+    if %geolocation%==GY set "countrycode=SA"
+    if %geolocation%==HT set "countrycode=NA"
+    if %geolocation%==HM set "countrycode=AN"
+    if %geolocation%==VA set "countrycode=EU"
+    if %geolocation%==HN set "countrycode=NA"
+    if %geolocation%==HK set "countrycode=AS"
+    if %geolocation%==HU set "countrycode=EU"
+    if %geolocation%==IN set "countrycode=AS"
+    if %geolocation%==ID set "countrycode=AS"
+    if %geolocation%==IR set "countrycode=AS"
+    if %geolocation%==IQ set "countrycode=AS"
+    if %geolocation%==IE set "countrycode=EU"
+    if %geolocation%==IM set "countrycode=EU"
+    if %geolocation%==IL set "countrycode=AS"
+    if %geolocation%==IT set "countrycode=EU"
+    if %geolocation%==JM set "countrycode=NA"
+    if %geolocation%==JP set "countrycode=AS"
+    if %geolocation%==JE set "countrycode=EU"
+    if %geolocation%==JO set "countrycode=AS"
+    if %geolocation%==KZ set "countrycode=AS"
+    if %geolocation%==KE set "countrycode=AF"
+    if %geolocation%==KI set "countrycode=OC"
+    if %geolocation%==KP set "countrycode=AS"
+    if %geolocation%==KR set "countrycode=AS"
+    if %geolocation%==KW set "countrycode=AS"
+    if %geolocation%==KG set "countrycode=AS"
+    if %geolocation%==LA set "countrycode=AS"
+    if %geolocation%==LV set "countrycode=EU"
+    if %geolocation%==LB set "countrycode=AS"
+    if %geolocation%==LS set "countrycode=AF"
+    if %geolocation%==LR set "countrycode=AF"
+    if %geolocation%==LY set "countrycode=AF"
+    if %geolocation%==LI set "countrycode=EU"
+    if %geolocation%==LT set "countrycode=EU"
+    if %geolocation%==LU set "countrycode=EU"
+    if %geolocation%==MO set "countrycode=AS"
+    if %geolocation%==MK set "countrycode=EU"
+    if %geolocation%==MG set "countrycode=AF"
+    if %geolocation%==MW set "countrycode=AF"
+    if %geolocation%==MY set "countrycode=AS"
+    if %geolocation%==MV set "countrycode=AS"
+    if %geolocation%==ML set "countrycode=AF"
+    if %geolocation%==MT set "countrycode=EU"
+    if %geolocation%==MH set "countrycode=OC"
+    if %geolocation%==MQ set "countrycode=NA"
+    if %geolocation%==MR set "countrycode=AF"
+    if %geolocation%==MU set "countrycode=AF"
+    if %geolocation%==YT set "countrycode=AF"
+    if %geolocation%==MX set "countrycode=NA"
+    if %geolocation%==FM set "countrycode=OC"
+    if %geolocation%==MD set "countrycode=EU"
+    if %geolocation%==MC set "countrycode=EU"
+    if %geolocation%==MN set "countrycode=AS"
+    if %geolocation%==ME set "countrycode=EU"
+    if %geolocation%==MS set "countrycode=NA"
+    if %geolocation%==MA set "countrycode=AF"
+    if %geolocation%==MZ set "countrycode=AF"
+    if %geolocation%==MM set "countrycode=AS"
+    if %geolocation%==NA set "countrycode=AF"
+    if %geolocation%==NR set "countrycode=OC"
+    if %geolocation%==NP set "countrycode=AS"
+    if %geolocation%==NL set "countrycode=EU"
+    if %geolocation%==AN set "countrycode=NA"
+    if %geolocation%==NC set "countrycode=OC"
+    if %geolocation%==NZ set "countrycode=OC"
+    if %geolocation%==NI set "countrycode=NA"
+    if %geolocation%==NE set "countrycode=AF"
+    if %geolocation%==NG set "countrycode=AF"
+    if %geolocation%==NU set "countrycode=OC"
+    if %geolocation%==NF set "countrycode=OC"
+    if %geolocation%==MP set "countrycode=OC"
+    if %geolocation%==NO set "countrycode=EU"
+    if %geolocation%==OM set "countrycode=AS"
+    if %geolocation%==PK set "countrycode=AS"
+    if %geolocation%==PW set "countrycode=OC"
+    if %geolocation%==PS set "countrycode=AS"
+    if %geolocation%==PA set "countrycode=NA"
+    if %geolocation%==PG set "countrycode=OC"
+    if %geolocation%==PY set "countrycode=SA"
+    if %geolocation%==PE set "countrycode=SA"
+    if %geolocation%==PH set "countrycode=AS"
+    if %geolocation%==PN set "countrycode=OC"
+    if %geolocation%==PL set "countrycode=EU"
+    if %geolocation%==PT set "countrycode=EU"
+    if %geolocation%==PR set "countrycode=NA"
+    if %geolocation%==QA set "countrycode=AS"
+    if %geolocation%==RE set "countrycode=AF"
+    if %geolocation%==RO set "countrycode=EU"
+    if %geolocation%==RU set "countrycode=EU"
+    if %geolocation%==RW set "countrycode=AF"
+    if %geolocation%==SH set "countrycode=AF"
+    if %geolocation%==KN set "countrycode=NA"
+    if %geolocation%==LC set "countrycode=NA"
+    if %geolocation%==PM set "countrycode=NA"
+    if %geolocation%==VC set "countrycode=NA"
+    if %geolocation%==WS set "countrycode=OC"
+    if %geolocation%==SM set "countrycode=EU"
+    if %geolocation%==ST set "countrycode=AF"
+    if %geolocation%==SA set "countrycode=AS"
+    if %geolocation%==SN set "countrycode=AF"
+    if %geolocation%==RS set "countrycode=EU"
+    if %geolocation%==SC set "countrycode=AF"
+    if %geolocation%==SL set "countrycode=AF"
+    if %geolocation%==SG set "countrycode=AS"
+    if %geolocation%==SK set "countrycode=EU"
+    if %geolocation%==SI set "countrycode=EU"
+    if %geolocation%==SB set "countrycode=OC"
+    if %geolocation%==SO set "countrycode=AF"
+    if %geolocation%==ZA set "countrycode=AF"
+    if %geolocation%==GS set "countrycode=AN"
+    if %geolocation%==ES set "countrycode=EU"
+    if %geolocation%==LK set "countrycode=AS"
+    if %geolocation%==SD set "countrycode=AF"
+    if %geolocation%==SR set "countrycode=SA"
+    if %geolocation%==SJ set "countrycode=EU"
+    if %geolocation%==SZ set "countrycode=AF"
+    if %geolocation%==SE set "countrycode=EU"
+    if %geolocation%==CH set "countrycode=EU"
+    if %geolocation%==SY set "countrycode=AS"
+    if %geolocation%==TW set "countrycode=AS"
+    if %geolocation%==TJ set "countrycode=AS"
+    if %geolocation%==TZ set "countrycode=AF"
+    if %geolocation%==TH set "countrycode=AS"
+    if %geolocation%==TL set "countrycode=AS"
+    if %geolocation%==TG set "countrycode=AF"
+    if %geolocation%==TK set "countrycode=OC"
+    if %geolocation%==TO set "countrycode=OC"
+    if %geolocation%==TT set "countrycode=NA"
+    if %geolocation%==TN set "countrycode=AF"
+    if %geolocation%==TR set "countrycode=EU"
+    if %geolocation%==TM set "countrycode=AS"
+    if %geolocation%==TC set "countrycode=NA"
+    if %geolocation%==TV set "countrycode=OC"
+    if %geolocation%==UG set "countrycode=AF"
+    if %geolocation%==UA set "countrycode=EU"
+    if %geolocation%==AE set "countrycode=AS"
+    if %geolocation%==GB set "countrycode=EU"
+    if %geolocation%==US set "countrycode=NA"
+    if %geolocation%==UM set "countrycode=OC"
+    if %geolocation%==UY set "countrycode=SA"
+    if %geolocation%==UZ set "countrycode=AS"
+    if %geolocation%==VU set "countrycode=OC"
+    if %geolocation%==VE set "countrycode=SA"
+    if %geolocation%==VN set "countrycode=AS"
+    if %geolocation%==VG set "countrycode=NA"
+    if %geolocation%==VI set "countrycode=NA"
+    if %geolocation%==WF set "countrycode=OC"
+    if %geolocation%==EH set "countrycode=AF"
+    if %geolocation%==YE set "countrycode=AS"
+    if %geolocation%==ZM set "countrycode=AF"
+    if %geolocation%==ZW set "countrycode=AF"
+)
+
 
 :: Change color
 if "%countrycode%"=="NA" set "natoggle=%brightred%"
@@ -1165,14 +1231,6 @@ if "%port%"=="500" set portinfo=ISAKMP
 if "%port%"=="3389" set portinfo=RRDP
 
 
-
-
-
-
-
-
-
-
 echo.
 echo IP in Question   [%targetip%]
 echo Port In Question [%port% - %portinfo%]
@@ -1180,8 +1238,8 @@ echo Port In Question [%port% - %portinfo%]
 set /p choice=%brightyellow%⚠️ SECURITY WARNING: Warning, You are about to scan a foreign server. Continue? (Y/N): 
 if %choice%==y goto continuescan
 if %choice%==Y goto continuescan
-if %choice%==N echo %brightyellow%Scan Abborted && goto commandline
-if %choice%==n echo %brightyellow%Scan Abborted && goto commandline
+if %choice%==N echo %brightyellow%Scan Aborted && goto commandline
+if %choice%==n echo %brightyellow%Scan Aborted && goto commandline
 goto scanchoice
 :continuescan
 echo %brightred%
