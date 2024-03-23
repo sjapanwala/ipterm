@@ -1,7 +1,6 @@
-<div style="width:20%; margin: center;">
-  
-![image](https://github.com/sjapanwala/netwise/assets/92124191/0860f4b7-50c7-4ca2-9670-a5ac6ecf989b)
-</div>
+<p align="center">
+  <img src="https://github.com/sjapanwala/netwise/assets/92124191/0860f4b7-50c7-4ca2-9670-a5ac6ecf989b" />
+</p>
 
 ## Quick Links
 [Download](https://github.com/sjapanwala/netwise/archive/refs/heads/main.zip) | [Updates](https://github.com/sjapanwala/netwise/blob/main/updates.md)
