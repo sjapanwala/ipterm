@@ -1,14 +1,5 @@
-```txt
-             _   __     __ 
-            / | / /__  / /_
-           /  |/ / _ \/ __/
-          / /|  /  __/ /_  
- _       /_/ |_/\___/\__/  
-| |     / (_)_______       
-| | /| / / / ___/ _ \      
-| |/ |/ / (__  )  __/      
-|__/|__/_/____/\___/       
-```
+![image](https://github.com/sjapanwala/netwise/assets/92124191/0860f4b7-50c7-4ca2-9670-a5ac6ecf989b)
+
 ## Quick Links
 [Download](https://github.com/sjapanwala/netwise/archive/refs/heads/main.zip) | [Updates](https://github.com/sjapanwala/netwise/blob/main/updates.md)
 ## Table of Contents
