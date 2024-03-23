@@ -1,4 +1,14 @@
-# **💻 NetWise** 
+```txt
+             _   __     __ 
+            / | / /__  / /_
+           /  |/ / _ \/ __/
+          / /|  /  __/ /_  
+ _       /_/ |_/\___/\__/  
+| |     / (_)_______       
+| | /| / / / ___/ _ \      
+| |/ |/ / (__  )  __/      
+|__/|__/_/____/\___/       
+```
 ## Quick Links
 [Download](https://github.com/sjapanwala/netwise/archive/refs/heads/main.zip) | [Updates](https://github.com/sjapanwala/netwise/blob/main/updates.md)
 ## Table of Contents
