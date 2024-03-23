@@ -15,13 +15,44 @@ set darkblue=[40;34m
 set darkpurple=[40;35m
 set darkcyan=[40;36m
 set white=[40;37m
+
+if "%1"=="-ul" (
+    goto updatelogs
+)
+if "%2" =="-uf" (
+    goto forceupdate
+) else (
+    goto continuecode
+)
+:updatelogs
+echo.
+echo Public Pre Release [%brightgreen%VER 0.5%white%]
+echo.
+echo Version information will be displayed here
+echo.
+goto end_program
+
+
+:forceupdate
+echo forceupdate/
+echo.
+echo config        │ %configfolder%
+echo netwise/root  │ %rootfolder%
+echo dump folder   │ %dumpfolder%
+echo log folder    │ %logfolder%
+echo error folder  │ %errorfolder%
+echo update folder │ %updatefolder% 
+echo SS folder     │ %savedstatefolder%
+goto end_program
+
+:continuecode
 ::---function vars
 ::update functions
 set currentfilename=%~n0%~x0
 ::if %currentfilename%==netwise.bat if exist netwise.cmd start netwise.cmd && del netwise.bat
 ::if %currentfilename%==netwise.cmd if exist netwise.bat start netwise.bat && del netwise.cmd
 ::terminal settings
-set tversion=0.5
+set tversion=Public Pre Release [VER 0.5]
 set ttheme=Original │📍%brightred%Net%brightwhite%Wise
 set shell=Windows
 FOR /F %%a IN ('curl -s https://ipv4.icanhazip.com/') DO set localip=%%a
@@ -692,6 +723,7 @@ echo ╚:Combines random numbers to generate a possible IP
 echo.
 echo update-h :----: shows this help menu
 echo update-a :----: allows user to update entire terminal
+goto commandline
 :updateall
 echo.
 echo %brightwhite%Welcome to %brightred%NetWise%brightwhite% Update Manager
@@ -1252,3 +1284,4 @@ goto commandline
 echo.
 echo 👋 GoodBye!
 timeout 2 >nul
+:end_program
