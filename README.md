@@ -1,9 +1,8 @@
+<h1 align="center">Netwise Network CommandLine 🛜 </h1>
 <p align="center">
-  <img src="https://github.com/sjapanwala/netwise/assets/92124191/0860f4b7-50c7-4ca2-9670-a5ac6ecf989b" />
+<img src="https://img.shields.io/badge/Version-Public_Pre_Release_[0.5]-red">
+<img src="https://img.shields.io/badge/Built-Batch_File-red">
 </p>
-
-## Quick Links
-[Download](https://github.com/sjapanwala/netwise/archive/refs/heads/main.zip) | [Updates](https://github.com/sjapanwala/netwise/blob/main/updates.md)
 
 ## Table of Contents
 - [Description](#what-is-netwise)
