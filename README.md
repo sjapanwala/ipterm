@@ -13,7 +13,10 @@
 - [Description](#what-is-netwise)
 - [Installation](#installation)
 - [Usage/Help](#usage--commands)
-
+## Hyper Links
+- [Recent Updates](https://github.com/sjapanwala/netwise/blob/main/updates.md)
+- [Previous Updates](https://github.com/sjapanwala/netwise/blob/main/updatearchive.md)
+- [Raw Code](https://github.com/sjapanwala/netwise/blob/main/netwise.cmd)
 
 
 ## What is NetWise?
