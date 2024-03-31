@@ -49,14 +49,14 @@
 ├─ comstruc 
 ├─ credit 
 ├─ links
-echo.
+
 [*] Testing Help   [*] Dis Help    [*] Generate IP   [*] TracePath Help     [*] Update Help
 ├─ test-h          ├─ dis-h        ├─ genip-h        ├─ tracepath-h         ├─ update-h 
 ├─ test-net        ├─ dis-notif    ├─ genip-create   ├─ tracepath-t         ├─ update-a 
 ├─ test-cl                         ├─ genip-loop     ├─ tracepath-web       ├─ update-r
 ├─ test-ban                                                                 ├─ update-ft
 ├─ test-unban 
-echo.
+
 [*] Geographic IP  [*] Port Scan   [*] Display Help
 ├─ geoip-h         ├─ pscan-h      ├─ show-iphotbar
 ├─ geoip-t         ├─ pscan-l      ├─ 
