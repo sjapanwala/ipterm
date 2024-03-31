@@ -4,6 +4,9 @@
 <p align="center">
 <img src="https://img.shields.io/badge/Version-Public_Pre_Release_[0.5]-red">
 <img src="https://img.shields.io/badge/Built-Batch_File-red">
+<img src="https://img.shields.io/badge/Cyber%20Security-red">
+<img src="https://img.shields.io/badge/IP%20Address-red">
+<img src="https://img.shields.io/badge/Networking-red">
 </p>
 
 ## Table of Contents
