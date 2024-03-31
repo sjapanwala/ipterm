@@ -32,9 +32,7 @@
 
 ## Usage + Commands
 #### Remember: Case Matters! Most commands are used with lowercase unless specified.
-### Enter `help` for generalized commands or `help-a` for a command tree.
-
-## Commands
+### Enter `help-g` for generalized commands or `help` for a command tree.
 #### Updates As Of Version 0.5.1
 ```txt
 [*] General Help   [*] Root Help   [*] Insert Help   [*] IP Inform Help    [*] Ping Help
