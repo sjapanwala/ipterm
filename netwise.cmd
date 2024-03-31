@@ -1,5 +1,6 @@
 @echo off
 chcp 65001>nul
+:mainstartup
 ::color variables
 set brightred=[40;91m
 set brightyellow=[40;93m
@@ -15,37 +16,32 @@ set darkblue=[40;34m
 set darkpurple=[40;35m
 set darkcyan=[40;36m
 set white=[40;37m
+set "configfile=False"
 
-if "%1"=="-ul" (
+if "%1"=="@config" (
+    set "configfile=True"
+    goto configfiles
+) 
+if "%1"=="@ul" (
     goto updatelogs
-)
-if "%2" =="-uf" (
-    goto forceupdate
 ) else (
     goto continuecode
 )
+goto continuecode
 :updatelogs
 echo.
 echo Public Pre Release [%brightgreen%VER 0.5%white%]
 echo.
-echo Version information will be displayed here
+echo Version information will be displayed hereko
 echo.
 goto end_program
 
-
-:forceupdate
-echo forceupdate/
-echo.
-echo config        │ %configfolder%
-echo netwise/root  │ %rootfolder%
-echo dump folder   │ %dumpfolder%
-echo log folder    │ %logfolder%
-echo error folder  │ %errorfolder%
-echo update folder │ %updatefolder% 
-echo SS folder     │ %savedstatefolder%
-goto end_program
 
 :continuecode
+:: detect cli
+::if exist "C:\Users\%username%\.config\netwise\.themes\CLISTORAGE" set "CLIFOUND=True"
+::if "%CLIFOUND%"=="True" goto 
+
 ::---function vars
 ::update functions
 set currentfilename=%~n0%~x0
@@ -81,6 +77,49 @@ title %username%@%computername% │ 📍 NetWise Terminal
 ::curl vars
 ::check if files are made
 
+
+if not "%configfile%"=="True" goto contcode
+:configfiles
+cls
+echo.
+echo %brightred%                   __ _       
+echo    ___ ___  _ __  / _(_) __ _ 
+echo   / __/ _ \│ '_ \│ │_│ │/ _` │
+echo  │ (_│ (_) │ │ │ │  _│ │ (_│ │
+echo   \___\___/│_│ │_│_│ │_│\__, │
+echo                         │___/ 
+echo.
+echo %white%# Options
+echo.
+echo [1] Change CLI Interface
+echo [2] Change Themes/Colors
+echo [3] Change Folder Partitions
+echo [4] Insert Module (soon)
+echo.
+echo [0] Save Changes and Exit
+set /p input=〉
+::if "%input%"=="1" goto changecli
+::if "%input%"=="2" goto changethemes
+::if "%input%"=="3" goto folderpart
+if "%input%"=="0" echo %brightgreen%Changes Saved! %white%exiting... && timeout 2 >nul && goto end_program
+echo %brightred% Please choose a valid option, or press "0" to save changes. 
+timeout 2 >nul
+goto configfiles
+
+:::changecli
+::echo.
+::echo Current CLI: %currentcli%
+::echo.
+::echo Option #1)
+::echo.
+::echo %brightwhite%
+::echo ┌───(%brightred%%termusername%%brightwhite%@%brightred%%computername%%brightwhite%)-[%brightpurple%%targetip%%brightwhite%]
+::echo └─%brightred%〉%brightwhite%
+::echo.
+::echo %brightred%%username%%white%@%brightred%%computername% ~ [%brightpurple%%targetip%%brightwhite%] 〉
+::pause
+
+:contcode
 if exist "C:\Users\%username%\.config" (
     set "configfolder=True"
 ) else (
@@ -132,8 +171,28 @@ if "%configfolder%"=="False" md C:\Users\%username%\.config && set /a filecounte
 if "%rootfolder%"=="False" md C:\Users\%username%\.config\netwise && set /a filecounter+=1
 echo %brightgreen%Successfully Created %filecounter% Files! %brightwhite%
 
+set "iphotbar=False"
 :startup
 cls
+echo.
+echo                                %brightred%                __                                      
+echo                                %brightred%               /\ \__  %brightwhite%            __                   
+echo                                %brightred%    ___      __\ \ ,_\ %brightwhite%__  __   __/\_\    ____     __   
+echo                                %brightred%  /' _ `\  /'__`\ \ \/ %brightwhite%/\ \/\ \/\ \/\ \  /',__\  /'__`\ 
+echo                                %brightred%  /\ \/\ \/\  __/\ \ \_%brightwhite%\ \ \_/ \_/ \ \ \/\__, `\/\  __/ 
+echo                                %brightred%  \ \_\ \_\ \____\\ \__\%brightwhite%\ \___x___/'\ \_\/\____/\ \____\
+echo                                %brightred%   \/_/\/_/\/____/ \/__/%brightwhite% \/__//__/   \/_/\/___/  \/____/
+echo. 
+if "%iphotbar%"=="True" (
+    goto iphotbar
+) else (
+    goto skiphotbar
+)
+:iphotbar  
+echo                                %brightwhite%      ╔═════════════════════════════════════════════╗
+echo                                %brightwhite%          %brightgreen%Target IP: %brightpurple%%targetip%%brightwhite%
+echo                                %brightwhite%      ╚═════════════════════════════════════════════╝
+:skiphotbar                                                    
 if %banned%==True goto banned
 if not %displaynotifs%==True goto commandline
 if %countercool%==True echo %brightyellow%⚠️: Please Refrain From Using IP Services %brightgreen%For 5 Minuites%brightyellow% In Order To Prevent Being Banned%brightwhite%
@@ -143,19 +202,19 @@ goto commandline
 echo ┌─(%brightblue%Please Plant This File Into %brightgreen%%targetdir%%brightblue% For Full Functionality)%white%
 echo │
 echo ├─'%white%Use "%brightgreen%root-plant%white%" as root user to plant this file'
-echo └─'%white%Plant this file to not show this message again, or type "%brightgreen%disable-notif%white%" to temporarily disable this message'
+echo └─'%white%Plant this file to not show this message again, or type "%brightgreen%dis-notif%white%" to temporarily disable this message'
 :commandline
 echo %brightwhite%
 echo ┌───(%brightred%%termusername%%brightwhite%@%brightred%%computername%%brightwhite%)-[%brightpurple%%targetip%%brightwhite%]
-set /p command=└─%brightred%!%brightwhite%
+set /p command=└─%brightred%〉%brightwhite%
 :: general commands
 if "%command%"=="docu" goto docu
 if "%command%"=="exit" goto exit
 if "%command%"=="comstruc" goto comstruc
 if "%command%"=="readme" start https://github.com/sjapanwala/netwise && goto commandline
 if "%command%"=="credit" start https://github.com/sjapanwala && goto commandline
-if "%command%"=="help" goto help
-if "%command%"=="help-a" goto allhelp
+if "%command%"=="help-g" goto help
+if "%command%"=="help" goto allhelp
 if "%command%"=="cls" goto startup
 if "%command%"=="clear" goto startup
 if "%command%"=="swusr" goto switchuser
@@ -175,10 +234,10 @@ if "%command%"=="insert-ip" goto insertip
 if "%command%"=="insert-api" goto apikey
 
 :: ipdisplay
-if "%command%"=="ipdisplay-h" goto ipdisplayhelp
-if "%command%"=="ipdisplay-l" goto ipdisplaylocal
-if "%command%"=="ipdisplay-t" goto ipdisplaytarget
-if "%command%"=="ipdisplay-t2" goto ipdisplaytarget2
+if "%command%"=="ipinform-h" goto ipdisplayhelp
+if "%command%"=="ipinform-l" goto ipdisplaylocal
+if "%command%"=="ipinform-t" goto ipdisplaytarget
+if "%command%"=="ipinform-t2" goto ipdisplaytarget2
 
 :: send packets
 if "%command%"=="ping-t" goto pingtarget
@@ -225,6 +284,8 @@ if "%command%"=="update-h" goto updatehelp
 if "%command%"=="update-a" goto updateall
 if "%command%"=="update-r" goto updatepackets
 if "%command%"=="update-ft" goto updaterepairtree
+
+if "%command%"=="show-iphotbar" goto toggleipbar
 
 :: problems
 
@@ -282,11 +343,11 @@ echo.
 goto commandline
 :allhelp
 echo.
-echo [%brightred%*%brightwhite%] General Help   [%brightred%*%brightwhite%] Root Help   [%brightred%*%brightwhite%] Insert Help   [%brightred%*%brightwhite%] IP Display Help    [%brightred%*%brightwhite%] Ping Help
-echo ├─ help            ├─ root-h       ├─ insert-h       ├─ ipdisplay-h         ├─ ping-h 
-echo ├─ help-a          ├─ root-plant   ├─ insert-ip      ├─ ipdisplay-t         ├─ ping-t 
-echo ├─ docu                            ├─ insert-api     ├─ ipdisplay-t2        ├─ ping-tb 
-echo ├─ readme                                            ├─ ipdisplay-l 
+echo [%brightred%*%brightwhite%] General Help   [%brightred%*%brightwhite%] Root Help   [%brightred%*%brightwhite%] Insert Help   [%brightred%*%brightwhite%] IP Inform Help    [%brightred%*%brightwhite%] Ping Help
+echo ├─ help            ├─ root-h       ├─ insert-h       ├─ ipinform-h         ├─ ping-h 
+echo ├─ help-g          ├─ root-plant   ├─ insert-ip      ├─ ipinform-t         ├─ ping-t 
+echo ├─ docu                            ├─ insert-api     ├─ ipinform-t2        ├─ ping-tb 
+echo ├─ readme                                            ├─ ipinform-l 
 echo ├─ cls/clear 
 echo ├─ swusr 
 echo ├─ info 
@@ -302,9 +363,9 @@ echo ├─ test-cl                         ├─ genip-loop     ├─ tracepa
 echo ├─ test-ban                                                                 ├─ update-ft
 echo ├─ test-unban 
 echo.
-echo [%brightred%*%brightwhite%] Geographic IP  [%brightred%*%brightwhite%] Port Scanner
-echo ├─ geoip-h         ├─ pscan-h
-echo ├─ geoip-t         ├─ pscan-l
+echo [%brightred%*%brightwhite%] Geographic IP  [%brightred%*%brightwhite%] Port Scan   [%brightred%*%brightwhite%] Display Help
+echo ├─ geoip-h         ├─ pscan-h      ├─ show-iphotbar
+echo ├─ geoip-t         ├─ pscan-l      ├─ 
 echo ├─ geoip-s         ├─ pscan-t
 echo.
 echo For More Details About a Command, Enter "%brightgreen%(commandname)-h%brightwhite%"
@@ -1277,6 +1338,34 @@ goto scanchoice
 echo %brightred%
 powershell -Command "Test-NetConnection -Port %port% %targetip%"
 echo.
+goto commandline
+
+
+:toggleipbar
+echo.
+if "%iphotbar%"=="False" (
+    set bardisplay=%brightred%OFF%brightwhite%
+    goto ipbar
+) else (
+    set  bardisplay=%brightgreen%ON%brightwhite%
+    goto ipbar
+)
+:ipbar
+echo %brightwhite%IP Bar: %bardisplay%
+echo.
+echo Press Any Button To Toggle IP Hotbar.
+pause>nul
+if "%iphotbar%"=="False" (
+    set "iphotbar=True"
+    echo.
+    echo %brightwhite%IP Bar %brightgreen%Enabled%brightwhite%, Please '%brightgreen%cls%brightwhite%' To Show Changes
+    goto commandline
+) else (
+   set "iphotbar=False"
+   echo.
+   echo %brightwhite%IP Bar %brightred%Disabled%brightwhite%, Please '%brightgreen%cls%brightwhite%' To Show Changes
+   goto commandline
+)
 goto commandline
 
 
