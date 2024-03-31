@@ -34,6 +34,33 @@
 #### Remember: Case Matters! Most commands are used with lowercase unless specified.
 ### Enter `help` for generalized commands or `help-a` for a command tree.
 
-
+## Commands
+#### Updates As Of Version 0.5.1
+```txt
+[*] General Help   [*] Root Help   [*] Insert Help   [*] IP Inform Help    [*] Ping Help
+├─ help            ├─ root-h       ├─ insert-h       ├─ ipinform-h         ├─ ping-h 
+├─ help-g          ├─ root-plant   ├─ insert-ip      ├─ ipinform-t         ├─ ping-t 
+├─ docu                            ├─ insert-api     ├─ ipinform-t2        ├─ ping-tb 
+├─ readme                                            ├─ ipinform-l 
+├─ cls/clear 
+├─ swusr 
+├─ info 
+├─ relaunch 
+├─ comstruc 
+├─ credit 
+├─ links
+echo.
+[*] Testing Help   [*] Dis Help    [*] Generate IP   [*] TracePath Help     [*] Update Help
+├─ test-h          ├─ dis-h        ├─ genip-h        ├─ tracepath-h         ├─ update-h 
+├─ test-net        ├─ dis-notif    ├─ genip-create   ├─ tracepath-t         ├─ update-a 
+├─ test-cl                         ├─ genip-loop     ├─ tracepath-web       ├─ update-r
+├─ test-ban                                                                 ├─ update-ft
+├─ test-unban 
+echo.
+[*] Geographic IP  [*] Port Scan   [*] Display Help
+├─ geoip-h         ├─ pscan-h      ├─ show-iphotbar
+├─ geoip-t         ├─ pscan-l      ├─ 
+├─ geoip-s         ├─ pscan-t
+```
 
 
