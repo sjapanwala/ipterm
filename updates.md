@@ -10,11 +10,11 @@
 | [ReadMe.md](https://github.com/sjapanwala/netwise/blob/main/README.md ) | [Download ZIP](https://github.com/sjapanwala/netwise/archive/refs/heads/main.zip) | [Download Code](https://github.com/sjapanwala/netwise/blob/main/netwise.cmd) | [Updates](https://github.com/sjapanwala/netwise/blob/main/updates.md) |
 
 ## Updates + Logs
-```Public Pre Release [VER 0.5]```
+```Public Pre Release [VER 0.5.1]```
 ```txt
 ~~ Stats ~~
 
-CLI Commands -> 49
+CLI Commands -> 50
 API's In Use -> 03
 Arg Commands -> 2
 ```
@@ -24,44 +24,23 @@ Arg Commands -> 2
 Updates 0.5/Public Pre Release.
 
 Additions
-├─ Major Bug Fixes
+├─ Minor Bug Fixes
 ├─ Added New Commands
-├─ Added Help Tree
-├─ Added Directory Structure
-├─ Added Working Updater
-├─ Added Launch Arguement (see [VER 0.5] arguments block)
-└─ Updated "info" section
 
 Removed
 └─ Minor Bugs
 
 Commands
-├─ General Commands
-│  ├─ "help-a"
-│  ├─ "relaunch"
-│  ├─ "comstruc"
-│  └─ "links"
-├─ Generative IP
-│  ├─ "genip-h"
-│  ├─ "genip-create"
-│  └─ "genip-loop"
-├─ Geographical IP
-│  ├─ "geoip-h"
-│  ├─ "geoip-t"
-│  └─ "geoip-s"
-└─ Port Scan
-   ├─ "pscan-h"
-   ├─ "pscan-l"
-   ├─ "pscan-t"
-
+└─ Display Settings
+   ├─ "show-iphotbar"
 ```
 ```cmd
 rem "Arguements"
 rem "enter these arguements before starting netwise, inside of the terminal"
 
-> netwise -ul
+> netwise @ul
 └─ Shows Update Logs
 
-> netwise -uf
-└─ Force Update File
+> netwise @config
+└─ Configuration Menu
 ```
