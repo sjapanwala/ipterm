@@ -27,7 +27,7 @@
 ### Install Using Github
 - ✅ [GitHub ZIP (Both OpenSource + EXE)](https://github.com/sjapanwala/netwise/archive/refs/heads/main.zip)
 - ✅ [OpenSource GITHUB Script (OpenSource)](https://github.com/sjapanwala/netwise/blob/main/netwise.cmd)
-- ✅ [Executable File Script (EXE))](https://github.com/sjapanwala/netwise/raw/main/netwise.exe)
+- ✅ [Executable File Script (EXE))](https://github.com/sjapanwala/netwise/raw/main/netwise.exe) (OUTDATED)
 - ✅ [OpenSource GITHUB Script (RAW, OpenSource))](https://raw.githubusercontent.com/sjapanwala/netwise/main/netwise.cmd)
 
 ## Usage + Commands
