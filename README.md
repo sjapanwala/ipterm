@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="https://github.com/sjapanwala/netwise/assets/92124191/90d1baa5-5a03-45dc-a4f8-e0a864d35b50"
+  <img src="https://github.com/sjapanwala/netwise/assets/92124191/8458db44-3778-4b56-902d-79674d7c356c"
 </h1>
 <p align="center">
 <img src="https://img.shields.io/badge/Version-Public_Pre_Release_[0.5]-red">
