@@ -2,20 +2,21 @@
 chcp 65001>nul
 :mainstartup
 ::color variables
-set brightred=[40;91m
-set brightyellow=[40;93m
-set brightgreen=[40;92m
-set brightblue=[40;94m
-set brightpurple=[40;95m
-set brightcyan=[40;96m
-set brightwhite=[40;97m
-set darkred=[40;31m
-set darkyellow=[40;33m
-set darkgreen=[40;32m
-set darkblue=[40;34m
-set darkpurple=[40;35m
-set darkcyan=[40;36m
-set white=[40;37m
+set brightred=[1;91m
+set brightyellow=[93m
+set brightgreen=[1;92m
+set brightblue=[94m
+set brightpurple=[95m
+set brightcyan=[96m
+set brightwhite=[97m
+set darkred=[31m
+set darkyellow=[33m
+set darkgreen=[32m
+set darkblue=[34m
+set darkpurple=[35m
+set darkcyan=[36m
+set white=[37m
+set grey=[1;90m
 set "configfile=False"
 
 if "%1"=="@config" (
