@@ -16,7 +16,8 @@ set darkblue=[34m
 set darkpurple=[35m
 set darkcyan=[36m
 set white=[37m
-set grey=[1;90m
+set grey=[90m
+set reg=[0m
 set "configfile=False"
 
 if "%1"=="@config" (
@@ -1372,6 +1373,6 @@ goto commandline
 
 :exit
 echo.
-echo 👋 GoodBye!
+echo 👋 GoodBye!%reg%
 timeout 2 >nul
 :end_program
